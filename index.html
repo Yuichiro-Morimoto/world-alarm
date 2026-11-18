@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>世界の朝アラーム（試作v3・ユーザー向きUI）</title>
+<style>
+  /* ホビサヤ・ウェルビーイング基調：低彩度クールトーン＋余白、水の滲みはアクセントのみ */
+  :root{
+    --bg:#f6f4ee; --paper:#fdfcf8; --sage:#dfe7dc; --bluegrey:#dde5ea; --bluegrey2:#eef2f3;
+    --text:#2e3a42; --muted:#71808a; --line:#d8dee0;
+    --ink:#2f5d8a; --ink2:#7fa8c4; --accent:#476b7d; --stamp:#5d7d5a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN",-apple-system,"Noto Sans JP",sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:600px;margin:0 auto;padding:40px 20px 64px}
+  .hero{text-align:center;padding:24px 8px 4px}
+  .ripple{width:110px;height:110px;margin:0 auto 8px;border-radius:50%;
+    background:radial-gradient(circle at 42% 40%, rgba(47,93,138,.55) 0%, rgba(127,168,196,.35) 38%, rgba(127,168,196,.12) 62%, rgba(127,168,196,0) 72%)}
+  .kicker{color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.34em}
+  .hook{font-size:17px;font-weight:700;color:var(--accent-deep);line-height:1.75;margin:0 0 6px}
+  h1{font-size:32px;font-weight:800;letter-spacing:.03em;margin:12px 0 14px;line-height:1.35}
+  .sub{color:var(--muted);font-size:14px;line-height:2;margin:0}
+  .sub b{color:var(--text)}
+  .real{display:inline-block;font-size:10px;color:#fff;background:var(--accent);border-radius:999px;padding:2px 8px;font-weight:700;vertical-align:2px}
+  .badge{display:inline-block;margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:11px;color:var(--accent);font-weight:700}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:24px 20px;margin-top:26px}
+  .card.sage{background:var(--sage)}
+  .card.bluegrey{background:var(--bluegrey2)}
+  .card h2{font-size:17px;font-weight:800;letter-spacing:.05em;margin:0 0 6px}
+  .card .lead{font-size:12px;color:var(--muted);line-height:1.8;margin:0 0 14px}
+  .note{font-size:11px;color:var(--muted);line-height:1.8}
+  input[type=time]{width:100%;font-size:38px;font-weight:700;text-align:center;background:#fff;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px;font-family:inherit}
+  button{width:100%;border:0;border-radius:999px;padding:16px;font-size:16px;font-weight:800;letter-spacing:.04em;cursor:pointer;margin-top:12px;font-family:inherit}
+  .primary{background:var(--accent);color:#fff}
+  .ghost{background:#fff;color:var(--text);border:1px solid var(--line)}
+  .danger{background:#fff;color:#476b7d;border:1px solid var(--line)}
+  .small-link{background:none;border:0;color:var(--accent);font-size:13px;font-weight:700;text-decoration:underline;padding:8px;width:100%;cursor:pointer;font-family:inherit}
+  #status{text-align:center;font-size:14px;color:var(--accent);min-height:24px;margin-top:14px;line-height:1.7;font-weight:700}
+  #nowPlaying{text-align:center;font-size:14px;line-height:1.9;min-height:56px;color:var(--muted)}
+  #nowPlaying .country{font-size:22px;font-weight:800;color:var(--text);display:block}
+  #nowPlaying .pattern{font-size:14px;font-weight:700;color:var(--accent);display:block}
+  #nowPlaying .story{font-size:12px;color:var(--muted);display:block;margin-top:6px;line-height:1.8}
+  .label{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.08em;margin:18px 0 8px}
+  .days{display:flex;gap:6px}
+  .days button{flex:1;margin:0;padding:10px 0;font-size:13px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--muted)}
+  .days button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .seg{display:flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px}
+  .seg button{flex:1;margin:0;padding:10px 0;font-size:13px;border-radius:999px;background:transparent;color:var(--muted)}
+  .seg button.on{background:var(--sage);color:var(--text)}
+  .rowline{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:16px;font-size:14px;font-weight:700}
+  .rowline .desc{font-size:11px;color:var(--muted);font-weight:400;margin-top:2px;line-height:1.6}
+  input[type=range]{flex:1;accent-color:var(--accent)}
+  .switch{position:relative;width:52px;height:30px;flex:none}
+  .switch input{opacity:0;width:100%;height:100%;position:absolute;margin:0;cursor:pointer}
+  .switch i{position:absolute;inset:0;background:#cfd8dc;border-radius:999px;transition:.2s;pointer-events:none}
+  .switch i::after{content:"";position:absolute;width:24px;height:24px;background:#fff;border-radius:50%;top:3px;left:3px;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .switch input:checked + i{background:var(--accent)}
+  .switch input:checked + i::after{left:25px}
+  .stats{display:flex;gap:10px;margin-bottom:14px}
+  .stat{flex:1;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 6px;text-align:center}
+  .stat .num{font-size:20px;font-weight:800}
+  .stat .label{font-size:10px;color:var(--muted);margin-top:2px}
+  .bar{height:6px;background:#fff;border:1px solid var(--line);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ink2),var(--ink));width:0%}
+  .country{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px}
+  .country.playing{outline:2px solid var(--ink2)}
+  .country .head{display:flex;justify-content:space-between;align-items:baseline}
+  .country .name{font-weight:800;font-size:16px}
+  .country .prog{font-size:11px;color:var(--muted)}
+  .pattern{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--bluegrey);font-size:12px}
+  .pattern .place{color:var(--text);font-weight:700}
+  .pattern .sound{color:var(--muted)}
+  .pattern .stamp{color:var(--stamp);font-weight:800;white-space:nowrap}
+  .country.locked{opacity:.55;filter:grayscale(.8);background:var(--bluegrey2)}
+  .steps{display:flex;gap:10px;text-align:center}
+  .steps div{flex:1;font-size:11px;color:var(--muted);line-height:1.7}
+  .steps .n{display:block;font-size:18px;font-weight:800;color:var(--accent);margin-bottom:2px}
+  details{margin-top:6px}
+  summary{font-size:13px;font-weight:700;color:var(--accent);cursor:pointer;padding:6px 0}
+  details p{font-size:12px;color:var(--muted);line-height:1.9;margin:6px 0}
+  details p a{color:var(--ink);font-weight:700}
+
+  .modal{position:fixed;inset:0;background:rgba(38,49,56,.45);display:none;align-items:flex-end;justify-content:center;z-index:60}
+  .modal.open{display:flex}
+  .sheet{background:var(--card);width:100%;max-width:480px;border-radius:20px 20px 0 0;padding:22px 20px 28px;max-height:88vh;overflow:auto;box-sizing:border-box}
+  .sheet h3{margin:0 0 6px;font-size:16px;color:var(--ink)}
+  .sheet label{display:block;font-size:12px;color:var(--muted);margin:14px 0 6px}
+  .sheet select,.sheet textarea,.sheet input[type="text"]{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;font-size:14px;background:#fff;color:var(--ink)}
+  .sheet textarea{min-height:110px;resize:vertical}
+
+  .pv{flex:none;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:700;cursor:pointer}
+  .pv.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  #pvAsk{display:none;margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  #pvAsk .q{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px}
+  #pvAsk .row{display:flex;gap:8px;flex-wrap:wrap}
+  #pvAsk button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;color:var(--ink)}
+
+  .share-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .share-row a,.share-row button{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer}
+  .share-row a.main,.share-row button.main{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .share-label{font-size:12px;color:var(--muted);margin-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="ripple"></div>
+    <div class="kicker">毎朝ちがう音のアラーム</div>
+    <p class="hook">いつも同じアラーム音、<br>聞くだけで憂鬱になっていませんか？</p>
+    <h1>世界の朝で、<br>目覚める。</h1>
+    <p class="sub">このアプリでは、毎日違う音で目覚めることができます。しかも、世界の朝の音で。<br>明日の朝、世界のどこで目覚めるかはお楽しみ。だから朝が、少しだけ憂鬱じゃなくなる。</p>
+    <span class="badge">すべての音は現地で録音した「実録音」です</span>
+  </div>
+
+  <div class="card bluegrey">
+    <h2>これは「テスト版」です</h2>
+    <p class="lead">世界の朝の実録音で目覚めるアラームを、本当にアプリとして実現できるか確かめるための試作品です。いま鳴る音はイメージ音で、このページを開いている間だけ鳴ります。</p>
+    <p class="lead">実現できるかどうかは、みなさんの応援とご意見にかかっています。「こんな音で起きたい」「この国の朝が聞きたい」――その一言が、開発を前に進めます。</p>
+    <p class="lead">なお、インドネシア（ウブド）とカンボジア（プノンペン）の音は、実際にもりーが旅先で録った音が採用されています。本番のアプリでは、その録音がそのまま鳴ります。</p>
+  </div>
+
+  <div class="card">
+    <div class="steps">
+      <div><span class="n">1</span>起きる時刻を決める</div>
+      <div><span class="n">2</span>セットするだけ</div>
+      <div><span class="n">3</span>明日の朝は、世界のどこか</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>明日のアラーム</h2>
+    <p class="lead">音は選ばなくて大丈夫。あなたが起きる頃、まだ聞いたことのない朝が鳴ります。</p>
+    <input type="time" id="alarmTime" value="07:00">
+    <div class="label">繰り返す曜日</div>
+    <div class="days" id="days"></div>
+    <div class="label">明日の気分は？</div>
+    <div class="seg" id="moodSeg">
+      <button data-mood="any" class="on">おまかせ</button>
+      <button data-mood="quiet">しずかな朝</button>
+      <button data-mood="lively">にぎやかな朝</button>
+    </div>
+    <div class="rowline">
+      <div>ゆっくり大きくなる<div class="desc">小さな音から始めて、そっと起こします</div></div>
+      <label class="switch"><input type="checkbox" id="fadeToggle" checked><i></i></label>
+    </div>
+    <div class="rowline">
+      <div style="flex:none">音量</div>
+      <input type="range" id="volSlider" min="10" max="100" value="80">
+    </div>
+    <button class="primary" id="setBtn">この時刻にセットする</button>
+    <div id="status">まだセットされていません</div>
+    <button class="small-link" id="playNowBtn">テストする（3秒後に鳴ります）</button>
+  </div>
+
+  <div class="card sage" id="wakeCard" style="display:none">
+    <h2>おはようございます</h2>
+    <div id="nowPlaying"></div>
+    <button class="primary" id="stopBtn">起きた</button>
+    <button class="danger" id="snoozeBtn">あと5分寝る</button>
+  </div>
+
+  <div class="card bluegrey">
+    <h2>あなたの朝の旅</h2>
+    <p class="lead">まずは気になる音をタップして、聞いてみてください。目覚めるたびに、旅先がひとつずつ増えていきます。</p>
+    <div class="stats">
+      <div class="stat"><div class="num" id="wakeStat">0</div><div class="label">目覚めた回数</div></div>
+      <div class="stat"><div class="num" id="countryStat">0</div><div class="label">目覚めた国</div></div>
+      <div class="stat"><div class="num" id="patternStat">0</div><div class="label">聞いた朝の音</div></div>
+    </div>
+    <div class="bar"><i id="barFill"></i></div>
+    <div id="pvAsk"><div class="q">聞いてみて、どうでしたか？</div><div class="row"><button type="button" data-rate="よかった">😊 よかった</button><button type="button" data-rate="ふつう">😐 ふつう</button><button type="button" data-rate="イマイチ">😖 イマイチ</button></div></div>
+    <div id="countryList"></div>
+    <p class="note" style="margin-top:14px">新しい国や音は、アップデートで少しずつ増えていきます。次はラオス、ネパール、トルコなどを予定しています。</p>
+  </div>
+
+  <div class="card">
+    <h2>このアプリについて</h2>
+    <details>
+      <summary>なぜ「毎朝ちがう音」なの？</summary>
+      <p>同じ音を毎朝聞くと、脳がその音と「起きたくない気持ち」を結びつけて覚えてしまいます（条件反射）。音が毎回ちがえば、その結びつきができにくく、朝の憂鬱さが軽くなる、という考え方です。</p>
+    </details>
+    <details>
+      <summary>音はどこで録ったもの？</summary>
+      <p>すべて、旅人「もりー」が実際に現地へ行って録音した音です。フリー素材や作り物の音は使っていません。寺の鐘、朝市のにぎわい、海辺の波――その場所の朝、そのままの音で起こします。</p><p>もりーの旅の様子はこちらから見られます：<br><a href="https://www.youtube.com/@molly_travel1994" target="_blank" rel="noopener">YouTube「ホビサヤ by もりー」</a>／<a href="https://www.tiktok.com/@molly_japanese" target="_blank" rel="noopener">TikTok @molly_japanese</a></p>
+    </details>
+    <details>
+      <summary>アプリは無料？</summary>
+      <p>はい、無料で使えます。アプリ内には広告が表示されますが、広告を消せる有料プラン（買い切り）も用意する予定です。広告が出るのは設定やコレクションの画面だけで、鳴っている最中の画面には出ません。アラーム自体はオフラインでも鳴ります。</p>
+    </details>
+    <details>
+      <summary>音はこれからも増える？</summary>
+      <p>はい。ただし、音が増えるのは「もりー」が旅に出たときだけです。新しい旅のたびに、その土地の朝の音が追加されます。アプリを入れておくだけで、あなたの「目覚められる場所」が増えていきます。</p>
+      <p>「もっと音を増やしてほしい」と思ったら、もりーの旅を応援してもらえると嬉しいです。応援は次の旅費になり、行ける国と録れる朝が増えます。</p>
+    </details>
+  </div>
+
+
+
+  <div class="card sage" style="text-align:center">
+    <h2 style="text-align:left">新しい朝の音を、応援する</h2>
+    <p class="note" style="text-align:left">このアプリの音は、もりーの旅そのものです。旅を応援してもらえると、次の国へ行けるようになり、新しい朝の音が増えます。</p>
+    <a class="primary" href="https://www.youtube.com/@molly_travel1994" target="_blank" rel="noopener" style="display:block;text-decoration:none;margin-top:14px;padding:14px;border-radius:12px">YouTubeで応援する（Super Thanks）</a>
+    <p class="note" style="margin-top:10px">リンク先のYouTube「ホビサヤ」の動画で「ありがとう（Super Thanks）」から応援できます。</p>
+    <div class="share-label">シェアして広めてもらえると嬉しいです</div>
+    <div class="share-row">
+      <a id="shareX" target="_blank" rel="noopener">Xでシェア</a>
+      <a id="shareLine" target="_blank" rel="noopener">LINEで送る</a>
+      <a id="shareFb" target="_blank" rel="noopener">Facebookでシェア</a>
+      <button type="button" id="shareCopy">リンクをコピー</button>
+      <button type="button" id="shareNative" style="display:none">シェアする</button>
+    </div>
+  </div>
+
+  <div class="card" style="text-align:center">
+    <h2 style="text-align:left">使ってみた感想を聞かせてください</h2>
+    <p class="note" style="text-align:left">気づいたことや「鳴らなかった」などのエラーは、こちらから送れます。いただいた声は次のアップデートに活かします。</p>
+    <button class="primary" id="feedbackBtn" type="button" style="margin-top:14px">ご意見・ご感想・エラー報告</button>
+  </div>
+
+  <p class="note" style="text-align:center;margin-top:24px">※ これは試作品です。この画面を開いている間だけ鳴ります。試し聞きの音はイメージ音で、本番では現地の実録音が鳴ります。</p>
+  <p class="note" style="text-align:center;margin-top:14px">© もりー</p>
+</div>
+
+
+<div class="modal" id="fbModal">
+  <div class="sheet">
+    <h3>ご意見・ご感想・エラー報告</h3>
+    <p class="note">鳴らなかった・音がおかしい等のエラーは、機種名と起きた時刻も書いてもらえると助かります。</p>
+    <div id="fbForm">
+      <label for="fbType">種類</label>
+      <select id="fbType">
+        <option>ご感想</option>
+        <option>ご意見・ご要望</option>
+        <option>エラー報告（鳴らなかった等）</option>
+        <option>その他</option>
+      </select>
+      <label for="fbMsg">内容</label>
+      <textarea id="fbMsg" placeholder="自由に書いてください"></textarea>
+      <label for="fbContact">連絡先（任意・返信が必要な場合のみ）</label>
+      <input type="text" id="fbContact" placeholder="メールアドレスなど">
+      <a class="primary" id="fbSend" href="https://docs.google.com/forms/d/e/1FAIpQLSfhW_yrUviJWAblDmFateVlgU4oj0yf9Jq8WvVAEw_Q1ptfBw/viewform" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;margin-top:18px;padding:14px;border-radius:12px">送信する</a>
+      <button class="small-link" id="fbCancel" type="button" style="display:block;margin:12px auto 0">閉じる</button>
+    </div>
+    <div id="fbThanks" style="display:none;text-align:center;padding:18px 0 6px">
+      <p style="font-weight:700;color:var(--ink)">あと少しで送信完了です。</p>
+      <p class="note">Googleフォームを開きました。入力した内容はコピーしてあるので、フォームの「内容」に貼り付けて、種類を選んで送信してください。</p>
+      <button class="small-link" id="fbClose2" type="button">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+// ===== 音源カタログ：国 > パターン（場所・音）の2階層／本番は現地の実録音 =====
+const COUNTRIES = [
+  {id:"th", flag:"🇹🇭", country:"タイ", story:"朝の寺では鐘が響き、屋台が一日を始めます。", patterns:[
+    {id:"th-ayutthaya", place:"アユタヤ", sound:"寺の鐘", kind:"bell"},
+    {id:"th-bangkok-market", place:"バンコク", sound:"朝市", kind:"market"},
+    {id:"th-chaophraya", place:"バンコク", sound:"チャオプラヤー川辺", kind:"ocean"},
+  ]},
+  {id:"vn", flag:"🇻🇳", country:"ベトナム", story:"バイクの波と市場の声で、街が一斉に動き出します。", patterns:[
+    {id:"vn-hoian", place:"ホイアン", sound:"朝市", kind:"market"},
+    {id:"vn-danang", place:"ダナン", sound:"海辺の朝", kind:"ocean"},
+    {id:"vn-hanoi", place:"ハノイ", sound:"湖畔の鳥", kind:"birds"},
+  ]},
+  {id:"id", flag:"🇮🇩", country:"インドネシア", story:"ガムランの音色と鶏の声が、ゆっくり朝を運んできます。", patterns:[
+    {id:"id-jogja", place:"ジョグジャカルタ", sound:"ガムラン", kind:"gamelan"},
+    {id:"id-bali", place:"ウブド", sound:"山道の鳥と虫", kind:"birds", real:true},
+    {id:"id-jakarta", place:"ジャカルタ", sound:"朝の街角と鶏", kind:"rooster"},
+  ]},
+  {id:"my", flag:"🇲🇾", country:"マレーシア", story:"熱帯の鳥の合唱と、コーヒー店のざわめきが朝の合図です。", patterns:[
+    {id:"my-kk", place:"コタキナバル", sound:"熱帯の鳥の合唱", kind:"birds"},
+    {id:"my-penang", place:"ペナン", sound:"コピティアムの朝", kind:"market"},
+    {id:"my-kl", place:"クアラルンプール", sound:"朝の街の鐘", kind:"bell"},
+  ]},
+  {id:"ph", flag:"🇵🇭", country:"フィリピン", story:"波の音と教会の鐘。海のそばの朝は、少しゆっくり流れます。", patterns:[
+    {id:"ph-cebu-sea", place:"セブ", sound:"海辺の朝", kind:"ocean"},
+    {id:"ph-oslob", place:"オスロブ", sound:"朝の港", kind:"market"},
+    {id:"ph-cebu-bell", place:"セブ", sound:"教会の鐘", kind:"bell"},
+  ]},
+  {id:"kr", flag:"🇰🇷", country:"韓国", story:"市場の呼び声と、寺の木を打つ静かな音が対照的です。", patterns:[
+    {id:"kr-seoul-market", place:"ソウル", sound:"市場の朝", kind:"market"},
+    {id:"kr-seoul-moktak", place:"ソウル", sound:"寺の木鐸", kind:"moktak"},
+    {id:"kr-busan", place:"釜山", sound:"海辺の市場", kind:"ocean"},
+  ]},
+  {id:"kh", flag:"🇰🇭", country:"カンボジア", story:"托鉢の鐘と川の流れ。静けさの中で一日が始まります。", patterns:[
+    {id:"kh-siemreap", place:"シェムリアップ", sound:"托鉢の鐘", kind:"bell"},
+    {id:"kh-mekong", place:"プノンペン", sound:"朝の通りの音", kind:"ocean", real:true},
+    {id:"kh-mondulkiri", place:"モンドルキリ", sound:"高原の鳥", kind:"birds"},
+  ]},
+];
+const LOCKED = [
+  {flag:"🇱🇦", country:"ラオス"}, {flag:"🇳🇵", country:"ネパール"},
+  {flag:"🇹🇷", country:"トルコ"}, {flag:"🇺🇿", country:"ウズベキスタン"},
+];
+const QUIET = ["bell","birds","ocean","gamelan","moktak"];
+const ALL_PATTERNS = [];
+COUNTRIES.forEach(c=>c.patterns.forEach(p=>ALL_PATTERNS.push({countryId:c.id, flag:c.flag, country:c.country, story:c.story, id:p.id, place:p.place, sound:p.sound, kind:p.kind})));
+const TOTAL_PATTERNS = ALL_PATTERNS.length;
+
+// ===== ユーザー設定（好み・曜日・実績） =====
+let prefs = {mood:"any", fade:true, vol:80, days:[1,2,3,4,5]};
+try{ Object.assign(prefs, JSON.parse(localStorage.getItem("asa_prefs_v3")||"{}")); }catch(e){}
+function savePrefs(){ try{ localStorage.setItem("asa_prefs_v3", JSON.stringify(prefs)); }catch(e){} }
+let heard = new Set();
+try{ heard = new Set(JSON.parse(localStorage.getItem("asa_heard_patterns_v2")||"[]")); }catch(e){}
+let wakes = 0;
+try{ wakes = parseInt(localStorage.getItem("asa_wakes_v3")||"0",10)||0; }catch(e){}
+function saveHeard(){ try{ localStorage.setItem("asa_heard_patterns_v2", JSON.stringify([...heard])); localStorage.setItem("asa_wakes_v3", String(wakes)); }catch(e){} }
+
+// 曜日チップ（日〜土）
+const dayNames = ["日","月","火","水","木","金","土"];
+const daysEl = document.getElementById("days");
+dayNames.forEach((n,i)=>{
+  const b = document.createElement("button");
+  b.textContent = n; b.dataset.day = i;
+  if(prefs.days.includes(i)) b.classList.add("on");
+  b.onclick = ()=>{ 
+    if(prefs.days.includes(i)){ prefs.days = prefs.days.filter(d=>d!==i); b.classList.remove("on"); }
+    else { prefs.days.push(i); b.classList.add("on"); }
+    if(!prefs.days.length){ prefs.days=[i]; b.classList.add("on"); }
+    savePrefs();
+  };
+  daysEl.appendChild(b);
+});
+// 気分セグメント
+document.querySelectorAll("#moodSeg button").forEach(b=>{
+  if(b.dataset.mood===prefs.mood){ document.querySelectorAll("#moodSeg button").forEach(x=>x.classList.remove("on")); b.classList.add("on"); }
+  b.onclick = ()=>{ document.querySelectorAll("#moodSeg button").forEach(x=>x.classList.remove("on")); b.classList.add("on"); prefs.mood=b.dataset.mood; bag=[]; savePrefs(); };
+});
+document.getElementById("fadeToggle").checked = !!prefs.fade;
+document.getElementById("fadeToggle").onchange = e=>{ prefs.fade=e.target.checked; savePrefs(); };
+document.getElementById("volSlider").value = prefs.vol;
+document.getElementById("volSlider").oninput = e=>{ prefs.vol=parseInt(e.target.value,10); savePrefs(); if(master) master.gain.value = Math.min(master.gain.value, prefs.vol/100); };
+
+// ===== 抽選：好みに合うパターンを、全て聞くまで重複なし＋前回と違う =====
+let bag = [], lastId = null;
+function pool(){
+  if(prefs.mood==="quiet") return ALL_PATTERNS.filter(p=>QUIET.includes(p.kind));
+  if(prefs.mood==="lively") return ALL_PATTERNS.filter(p=>!QUIET.includes(p.kind));
+  return ALL_PATTERNS;
+}
+function nextPattern(){
+  const list = pool();
+  if(!bag.length){
+    bag = list.map(p=>p.id);
+    for(let i=bag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}
+    if(bag[bag.length-1]===lastId && bag.length>1){[bag[0],bag[bag.length-1]]=[bag[bag.length-1],bag[0]];}
+  }
+  const id = bag.pop(); lastId = id;
+  return ALL_PATTERNS.find(p=>p.id===id);
+}
+
+// ===== コレクション表示 =====
+const listEl = document.getElementById("countryList");
+function renderCollection(playingId){
+  listEl.innerHTML = "";
+  COUNTRIES.forEach(c=>{
+    const heardCount = c.patterns.filter(p=>heard.has(p.id)).length;
+    const d = document.createElement("div");
+    d.className = "country" + (c.patterns.some(p=>p.id===playingId) ? " playing" : "");
+    let html = `<div class="head"><span class="name">${c.flag} ${c.country}</span><span class="prog">${heardCount}つ聞いた</span></div>`;
+    c.patterns.forEach(p=>{
+      html += `<div class="pattern"><span><span class="place">${p.place}</span>　<span class="sound">${p.sound}</span>${p.real ? ' <span class="real">実録音</span>' : ""}</span><span style="display:flex;align-items:center;gap:8px"><span class="stamp">${heard.has(p.id) ? "✓ 目覚めた" : ""}</span><button class="pv" data-pv="${p.id}" type="button">▶ 聞く</button></span></div>`;
+    });
+    d.innerHTML = html;
+    listEl.appendChild(d);
+  });
+  LOCKED.forEach(c=>{
+    const d = document.createElement("div");
+    d.className = "country locked";
+    d.innerHTML = `<div class="head"><span class="name">${c.flag} ${c.country}</span><span class="prog">近日追加</span></div>`;
+    listEl.appendChild(d);
+  });
+  const countriesHeard = COUNTRIES.filter(c=>c.patterns.some(p=>heard.has(p.id))).length;
+  document.getElementById("wakeStat").textContent = wakes;
+  document.getElementById("patternStat").textContent = heard.size;
+  document.getElementById("countryStat").textContent = countriesHeard;
+  document.getElementById("barFill").style.width = (heard.size/TOTAL_PATTERNS*100)+"%";
+}
+
+// ===== 合成オーディオ（試し聞き用イメージ音・フェードイン） =====
+let ctx=null, master=null, timers=[], playing=null, snoozeTimer=null;
+function audio(){
+  if(!ctx){
+    ctx = new (window.AudioContext||window.webkitAudioContext)();
+    master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
+  }
+  if(ctx.state==="suspended") ctx.resume();
+  return ctx;
+}
+function rampIn(sec){ const t=ctx.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value,t); master.gain.linearRampToValueAtTime(prefs.vol/100, t+sec); }
+function tone(freq, at, dur, type, vol, dest){
+  const o=ctx.createOscillator(), g=ctx.createGain();
+  o.type=type||"sine"; o.frequency.value=freq;
+  g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at+0.02); g.gain.exponentialRampToValueAtTime(0.0001, at+dur);
+  o.connect(g); g.connect(dest||master); o.start(at); o.stop(at+dur+0.1);
+}
+function bell(freq, at, vol){ [[1,1],[2.02,0.5],[2.74,0.32],[3.76,0.18]].forEach(([m,v])=>tone(freq*m, at, 3.2, "sine", vol*v)); }
+function noiseBurst(at, dur, freq, vol){
+  const len = Math.max(1, Math.floor(ctx.sampleRate*dur));
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=Math.random()*2-1;
+  const src=ctx.createBufferSource(); src.buffer=buf;
+  const f=ctx.createBiquadFilter(); f.type="bandpass"; f.frequency.value=freq; f.Q.value=0.8;
+  const g=ctx.createGain(); g.gain.setValueAtTime(0,at); g.gain.linearRampToValueAtTime(vol,at+dur*0.3); g.gain.linearRampToValueAtTime(0,at+dur);
+  src.connect(f); f.connect(g); g.connect(master); src.start(at); src.stop(at+dur+0.1);
+}
+function chirp(at){
+  const o=ctx.createOscillator(), g=ctx.createGain(), t=at;
+  o.type="sine"; const f0=2200+Math.random()*1400;
+  o.frequency.setValueAtTime(f0,t); o.frequency.exponentialRampToValueAtTime(f0*1.4,t+0.09); o.frequency.exponentialRampToValueAtTime(f0*0.9,t+0.2);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.12,t+0.03); g.gain.linearRampToValueAtTime(0,t+0.25);
+  o.connect(g); g.connect(master); o.start(t); o.stop(t+0.3);
+}
+function playKind(kind){
+  let count = 0;
+  const iv = setInterval(()=>{
+    if(!playing) { clearInterval(iv); return; }
+    const now = ctx.currentTime + 0.05; count++;
+    if(kind==="bell"){ bell(392, now, 0.5); bell(392, now+1.4, 0.3); if(count%2) chirp(now+0.7); }
+    else if(kind==="gamelan"){ [523,587,659,784,880].forEach((f,i)=>{ if(Math.random()<0.7) tone(f, now+i*0.28, 1.6, "triangle", 0.22); }); }
+    else if(kind==="birds"){ for(let i=0;i<4;i++) chirp(now+Math.random()*1.6); }
+    else if(kind==="ocean"){ noiseBurst(now, 2.4, 500, 0.30); if(count%3===0) bell(660, now+0.4, 0.18); }
+    else if(kind==="market"){ noiseBurst(now, 1.8, 1200, 0.10); tone(880, now+0.3, 0.25, "square", 0.05); tone(1174, now+1.1, 0.25, "square", 0.04); chirp(now+1.5); }
+    else if(kind==="moktak"){ for(let i=0;i<3;i++) noiseBurst(now+i*0.45, 0.09, 1800, 0.5); if(count%2) bell(330, now+1.2, 0.22); }
+    else if(kind==="rooster"){ [0,0.35,0.7].forEach((dt,i)=>tone(700+i*180, now+dt, 0.22, "sawtooth", 0.08)); bell(494, now+1.3, 0.25); }
+  }, 2100);
+  timers.push(iv);
+}
+function fadeOut(){
+  if(master && ctx){ const t=ctx.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value,t); master.gain.linearRampToValueAtTime(0, t+0.6); }
+  timers.forEach(id=>{ clearTimeout(id); clearInterval(id); }); timers=[];
+}
+function startAlarm(pattern){
+  audio(); clearTimeout(snoozeTimer);
+  playing = pattern || nextPattern();
+  rampIn(prefs.fade ? 15 : 2);
+  playKind(playing.kind);
+  document.getElementById("wakeCard").style.display = "block";
+  document.getElementById("nowPlaying").innerHTML =
+    `今朝の目覚めは…<span class="country">${playing.flag} ${playing.country}｜${playing.place}</span><span class="pattern">${playing.sound}</span><span class="story">${playing.story}</span>`;
+  document.getElementById("status").textContent = "鳴っています：" + playing.country + "・" + playing.place;
+  document.getElementById("wakeCard").scrollIntoView({behavior:"smooth", block:"center"});
+  renderCollection(playing.id);
+  if(navigator.vibrate) navigator.vibrate([300,150,300,150,300]);
+}
+function stopAlarm(){
+  fadeOut();
+  if(playing){ heard.add(playing.id); wakes++; saveHeard(); }
+  document.getElementById("status").textContent = playing ? `おはようございます。今朝は ${playing.country}・${playing.place} で目覚めました。「あなたの朝の旅」に記録しました ✓` : "止めました";
+  document.getElementById("wakeCard").style.display = "none";
+  playing = null; renderCollection(null);
+}
+function snoozeAlarm(){
+  const current = playing;
+  fadeOut(); playing = null;
+  document.getElementById("wakeCard").style.display = "none";
+  document.getElementById("status").textContent = "スヌーズ：5分後に、もう一度鳴ります";
+  snoozeTimer = setTimeout(()=>startAlarm(current), 5*60*1000);
+}
+
+// ===== アラーム予約（選んだ曜日のうち直近の日にセット） =====
+let alarmTimer=null;
+document.getElementById("setBtn").onclick = ()=>{
+  audio();
+  const v = document.getElementById("alarmTime").value; if(!v) return;
+  const [h,m] = v.split(":").map(Number);
+  const now = new Date();
+  let target = null;
+  for(let add=0; add<8; add++){
+    const cand = new Date(now); cand.setDate(now.getDate()+add); cand.setHours(h,m,0,0);
+    if(cand > now && prefs.days.includes(cand.getDay())){ target = cand; break; }
+  }
+  if(!target) return;
+  clearTimeout(alarmTimer);
+  alarmTimer = setTimeout(()=>{ startAlarm(); }, target-now);
+  const dayLabel = target.getDate()===now.getDate() ? "今日" : (target.getDate()===now.getDate()+1 ? "明日" : (target.getMonth()+1)+"/"+target.getDate());
+  document.getElementById("status").textContent = `セットしました：${dayLabel} ${v} に起こします。おやすみなさい 🌙`;
+};
+let testTimer = null;
+document.getElementById("playNowBtn").onclick = ()=>{
+  if(testTimer){ clearTimeout(testTimer); testTimer = null; document.getElementById("status").textContent = "テストを中止しました"; document.getElementById("playNowBtn").textContent = "テストする（3秒後に鳴ります）"; return; }
+  fadeOut(); playing=null;
+  let n = 3;
+  const btn = document.getElementById("playNowBtn");
+  document.getElementById("status").textContent = "テスト：" + n + "秒後に鳴ります（もう一度押すと中止）";
+  btn.textContent = "テストを中止する";
+  const tick = ()=>{
+    n--;
+    if(n<=0){ testTimer = null; btn.textContent = "テストする（3秒後に鳴ります）"; startAlarm(); return; }
+    document.getElementById("status").textContent = "テスト：" + n + "秒後に鳴ります（もう一度押すと中止）";
+    testTimer = setTimeout(tick, 1000);
+  };
+  testTimer = setTimeout(tick, 1000);
+};
+document.getElementById("stopBtn").onclick = stopAlarm;
+document.getElementById("snoozeBtn").onclick = snoozeAlarm;
+
+renderCollection(null);
+
+// ===== ご意見・ご感想・エラー報告（試作品では送信はダミー） =====
+const fbModal = document.getElementById("fbModal");
+function fbOpen(){ fbModal.classList.add("open"); }
+function fbClose(){ fbModal.classList.remove("open"); document.getElementById("fbForm").style.display="block"; document.getElementById("fbThanks").style.display="none"; }
+document.getElementById("feedbackBtn").addEventListener("click", fbOpen);
+document.getElementById("fbCancel").addEventListener("click", fbClose);
+document.getElementById("fbClose2").addEventListener("click", fbClose);
+fbModal.addEventListener("click", (e)=>{ if(e.target===fbModal) fbClose(); });
+document.getElementById("fbSend").addEventListener("click", (e)=>{
+  const type = document.getElementById("fbType").value;
+  const msg = document.getElementById("fbMsg").value.trim();
+  const contact = document.getElementById("fbContact").value.trim();
+  if(!msg){ e.preventDefault(); document.getElementById("fbMsg").focus(); return; }
+  const text = "【種類】" + type + "\n【内容】" + msg + (contact ? "\n【連絡先】" + contact : "");
+  try{ navigator.clipboard.writeText(text); }catch(err){}
+  document.getElementById("fbForm").style.display="none";
+  document.getElementById("fbThanks").style.display="block";
+});
+
+// ===== 試し聞き（コレクションから直接再生／目覚め記録には数えない） =====
+let preview = null;
+function stopPreview(ask){
+  if(!preview) return;
+  fadeOut(); playing = null; const was = preview; preview = null;
+  renderCollection();
+  if(ask){ const a = document.getElementById("pvAsk"); a.style.display = "block"; a.dataset.pattern = was.id; }
+}
+listEl.addEventListener("click", (e)=>{
+  const b = e.target.closest("[data-pv]"); if(!b) return;
+  const id = b.dataset.pv;
+  if(preview && preview.id === id){ stopPreview(true); return; }
+  if(playing && !preview) return; // アラーム再生中は無効
+  stopPreview(false);
+  const p = ALL_PATTERNS.find(x=>x.id===id); if(!p) return;
+  audio(); preview = p; playing = p; rampIn(2); playKind(p.kind);
+  renderCollection(p.id);
+  document.querySelectorAll("[data-pv]").forEach(x=>{ if(x.dataset.pv===id){ x.textContent = "■ 止める"; x.classList.add("on"); } });
+});
+document.getElementById("pvAsk").addEventListener("click", (e)=>{
+  const b = e.target.closest("[data-rate]"); if(!b) return;
+  const p = ALL_PATTERNS.find(x=>x.id===document.getElementById("pvAsk").dataset.pattern);
+  document.getElementById("fbType").value = "ご感想";
+  document.getElementById("fbMsg").value = (p ? `【${p.country}・${p.place}｜${p.sound}】を聞いて：` : "") + b.dataset.rate + "。";
+  document.getElementById("pvAsk").style.display = "none";
+  fbOpen();
+});
+
+// ===== テスト版メッセージ＆SNSシェア =====
+(function(){
+  const text = "毎朝、世界の朝の実録音で目覚めるアラーム『世界の朝アラーム』。いまテスト版が公開中です。実現には、みなさんの応援とご意見が必要です。";
+  const url = location.href;
+  const eu = encodeURIComponent(url), et = encodeURIComponent(text);
+  document.getElementById("shareX").href = "https://twitter.com/intent/tweet?text=" + et + "&url=" + eu;
+  document.getElementById("shareLine").href = "https://social-plugins.line.me/lineit/share?url=" + eu;
+  document.getElementById("shareFb").href = "https://www.facebook.com/sharer/sharer.php?u=" + eu;
+  document.getElementById("shareCopy").addEventListener("click", async (e)=>{
+    try{ await navigator.clipboard.writeText(url); e.target.textContent = "コピーしました ✓"; }
+    catch(err){ window.prompt("このリンクをコピーしてください", url); }
+    setTimeout(()=>{ e.target.textContent = "リンクをコピー"; }, 2000);
+  });
+  const nb = document.getElementById("shareNative");
+  if(navigator.share){ nb.style.display = ""; nb.addEventListener("click", ()=>{ navigator.share({title:"世界の朝アラーム（テスト版）", text:text, url:url}).catch(()=>{}); }); }
+})();
+</script>
+</body>
+</html>
