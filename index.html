@@ -18,10 +18,10 @@
  "alternateName": "World Morning Alarm",
  "applicationCategory": "LifestyleApplication",
  "operatingSystem": "Android",
- "softwareVersion": "0.2.1",
+ "softwareVersion": "0.2.0",
  "inLanguage": ["ja", "en", "vi", "id", "ms", "km"],
  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" },
- "downloadUrl": "https://github.com/Yuichiro-Morimoto/world-alarm/releases/download/v0.2.1/world-alarm-release.apk",
+ "downloadUrl": "https://github.com/Yuichiro-Morimoto/world-alarm/releases/download/v0.2.0/world-alarm-release.apk",
  "description": "毎朝ちがう、世界の朝の実録音で目覚めるアラームアプリ。同じ音に慣れて起きられない「アラーム症候群」対策に、全パターンを聞き終わるまで同じ音がくり返されないシャッフル方式を採用。音はすべて旅人が現地で録音した実録音で、広告は鳴動中の画面には表示されません。"
 }
 </script>
@@ -44,7 +44,7 @@
   /* ホビサヤ・ウェルビーイング基調：低彩度クールトーン＋余白、水の滲みはアクセントのみ */
   :root{
     --bg:#f6f4ee; --paper:#fdfcf8; --sage:#dfe7dc; --bluegrey:#dde5ea; --bluegrey2:#eef2f3;
-    --text:#2e3a42; --muted:#71808a; --line:#d8dee0;
+    --text:#2e3a42; --muted:#5d6e79; --line:#d8dee0;
     --ink:#2f5d8a; --ink2:#7fa8c4; --accent:#476b7d; --stamp:#5d7d5a;
   }
   *{box-sizing:border-box}
@@ -64,7 +64,7 @@
   .card.sage{background:var(--sage)}
   .card.bluegrey{background:var(--bluegrey2)}
   .card h2{font-size:17px;font-weight:800;letter-spacing:.05em;margin:0 0 6px}
-  .card .lead{font-size:12px;color:var(--muted);line-height:1.8;margin:0 0 14px}
+  .card .lead{font-size:12.5px;color:var(--muted);line-height:1.85;margin:0 0 14px}
   .note{font-size:11px;color:var(--muted);line-height:1.8}
   input[type=time]{width:100%;font-size:38px;font-weight:700;text-align:center;background:#fff;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px;font-family:inherit}
   button{width:100%;border:0;border-radius:999px;padding:16px;font-size:16px;font-weight:800;letter-spacing:.04em;cursor:pointer;margin-top:12px;font-family:inherit}
@@ -99,7 +99,9 @@
   .stat .label{font-size:10px;color:var(--muted);margin-top:2px}
   .bar{height:6px;background:#fff;border:1px solid var(--line);border-radius:99px;overflow:hidden}
   .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ink2),var(--ink));width:0%}
-  .country{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px}
+  .country{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px;position:relative;overflow:hidden}
+  .country::before{content:"";position:absolute;inset:0;background-image:var(--country-bg,none);background-size:cover;background-position:center;opacity:.15;pointer-events:none}
+  .country>*{position:relative}
   .country.playing{outline:2px solid var(--ink2)}
   .country .head{display:flex;justify-content:space-between;align-items:baseline}
   .country .name{font-weight:800;font-size:16px}
@@ -109,12 +111,9 @@
   .pattern .sound{color:var(--muted)}
   .pattern .stamp{color:var(--stamp);font-weight:800;white-space:nowrap}
   .country.locked{opacity:.55;filter:grayscale(.8);background:var(--bluegrey2)}
-  .steps{display:flex;gap:10px;text-align:center}
-  .steps div{flex:1;font-size:11px;color:var(--muted);line-height:1.7}
-  .steps .n{display:block;font-size:18px;font-weight:800;color:var(--accent);margin-bottom:2px}
   details{margin-top:6px}
   summary{font-size:13px;font-weight:700;color:var(--accent);cursor:pointer;padding:6px 0}
-  details p{font-size:12px;color:var(--muted);line-height:1.9;margin:6px 0}
+  details p{font-size:12.5px;color:var(--muted);line-height:1.9;margin:6px 0}
   details p a{color:var(--ink);font-weight:700}
 
   .modal{position:fixed;inset:0;background:rgba(38,49,56,.45);display:none;align-items:flex-end;justify-content:center;z-index:60}
@@ -135,6 +134,9 @@
   .share-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
   .share-row a,.share-row button{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
   .share-row svg{width:14px;height:14px;fill:currentColor;flex:none}
+  .share-row.country-share{gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--bluegrey)}
+  .share-row.country-share a{padding:5px 11px;font-size:11px;gap:5px}
+  .share-row.country-share svg{width:12px;height:12px}
   .share-row a.main,.share-row button.main{background:var(--accent);color:#fff;border-color:var(--accent)}
   .share-label{font-size:12px;color:var(--muted);margin-top:16px}
 
@@ -195,22 +197,14 @@
     <h2 data-i18n="testTitle">これは「テスト版」です</h2>
     <p class="lead" data-i18n="testLead1">世界の朝の実録音で目覚めるアラームを、本当にアプリとして実現できるか確かめるための試作品です。音はこのページを開いている間だけ鳴ります（「実録音」バッジの音は実際の録音、その他はイメージ音です）。</p>
     <p class="lead" data-i18n="testLead2">実現できるかどうかは、みなさんの応援とご意見にかかっています。「こんな音で起きたい」「この国の朝が聞きたい」――その一言が、開発を前に進めます。</p>
-    <p class="lead" data-i18n="testLead3">なお、インドネシア（ウブドとバリ島）とカンボジア（プノンペン）の音は、実際にもりーが旅先で録った音が採用されています。本番のアプリでは、その録音がそのまま鳴ります。</p>
+    <p class="lead" data-i18n="testLead3">なお、インドネシア（バリ島）とカンボジア（プノンペン）の音は、実際にもりーが旅先で録った音が採用されています。本番のアプリでは、その録音がそのまま鳴ります。</p>
   </div>
 
   <div class="card">
     <h2 data-i18n="androidTitle">📱 Android版（先行配布）ができました</h2>
-    <p class="lead" data-i18n="androidLead">Webの試作品に続いて、Androidアプリ版（v0.2.1）の先行配布を始めました。スマホにインストールすれば、実際のアラームとして使えます。アプリは日本語・英語・ベトナム語・インドネシア語・マレー語・クメール語に対応しました。使ってみた感想は、ページ下部のフォームから聞かせてください。</p>
-    <a class="primary" id="androidBtn" href="https://github.com/Yuichiro-Morimoto/world-alarm/releases/download/v0.2.1/world-alarm-release.apk" style="display:block;text-align:center;text-decoration:none;padding:14px;border-radius:12px">Android版をダウンロード（APK・約4.2MB）</a>
+    <p class="lead" data-i18n="androidLead">Webの試作品に続いて、Androidアプリ版（v0.2.0）の先行配布を始めました。スマホにインストールすれば、実際のアラームとして使えます。アプリは日本語・英語・ベトナム語・インドネシア語・マレー語・クメール語に対応しました。使ってみた感想は、ページ下部のフォームから聞かせてください。</p>
+    <a class="primary" id="androidBtn" href="https://github.com/Yuichiro-Morimoto/world-alarm/releases/download/v0.2.0/world-alarm-release.apk" style="display:block;text-align:center;text-decoration:none;padding:14px;border-radius:12px">Android版をダウンロード（APK・約4.2MB）</a>
     <p class="note" style="margin-top:10px" data-i18n="androidNote">※ Playストア外からのインストールのため、端末の設定で「提供元不明のアプリ」の許可が必要な場合があります。iPhone版は準備中です。</p>
-  </div>
-
-  <div class="card">
-    <div class="steps">
-      <div><span class="n">1</span><span data-i18n="step1">起きる時刻を決める</span></div>
-      <div><span class="n">2</span><span data-i18n="step2">セットするだけ</span></div>
-      <div><span class="n">3</span><span data-i18n="step3">明日の朝は、世界のどこか</span></div>
-    </div>
   </div>
 
   <div class="card">
@@ -364,12 +358,11 @@ badge:"すべての音は現地で録音した「実録音」です",
 testTitle:"これは「テスト版」です",
 testLead1:"世界の朝の実録音で目覚めるアラームを、本当にアプリとして実現できるか確かめるための試作品です。音はこのページを開いている間だけ鳴ります（「実録音」バッジの音は実際の録音、その他はイメージ音です）。",
 testLead2:"実現できるかどうかは、みなさんの応援とご意見にかかっています。「こんな音で起きたい」「この国の朝が聞きたい」――その一言が、開発を前に進めます。",
-testLead3:"なお、インドネシア（ウブドとバリ島）とカンボジア（プノンペン）の音は、実際にもりーが旅先で録った音が採用されています。本番のアプリでは、その録音がそのまま鳴ります。",
+testLead3:"なお、インドネシア（バリ島）とカンボジア（プノンペン）の音は、実際にもりーが旅先で録った音が採用されています。本番のアプリでは、その録音がそのまま鳴ります。",
 androidTitle:"📱 Android版（先行配布）ができました",
-androidLead:"Webの試作品に続いて、Androidアプリ版（v0.2.1）の先行配布を始めました。スマホにインストールすれば、実際のアラームとして使えます。アプリは日本語・英語・ベトナム語・インドネシア語・マレー語・クメール語に対応しました。使ってみた感想は、ページ下部のフォームから聞かせてください。",
+androidLead:"Webの試作品に続いて、Androidアプリ版（v0.2.0）の先行配布を始めました。スマホにインストールすれば、実際のアラームとして使えます。アプリは日本語・英語・ベトナム語・インドネシア語・マレー語・クメール語に対応しました。使ってみた感想は、ページ下部のフォームから聞かせてください。",
 androidBtn:"Android版をダウンロード（APK・約" + APK_SIZE + "MB）",
 androidNote:"※ Playストア外からのインストールのため、端末の設定で「提供元不明のアプリ」の許可が必要な場合があります。iPhone版は準備中です。",
-step1:"起きる時刻を決める", step2:"セットするだけ", step3:"明日の朝は、世界のどこか",
 alarmCardTitle:"明日のアラーム",
 alarmCardLead:"音は選ばなくて大丈夫。あなたが起きる頃、まだ聞いたことのない朝が鳴ります。",
 labelDays:"繰り返す曜日", labelMood:"明日の気分は？",
@@ -435,6 +428,7 @@ dayToday:"今日", dayTomorrow:"明日",
 testCounting:n=>"試聴：" + n + "秒後に鳴ります（もう一度押すと中止）",
 testCancelBtn:"テストを中止する", testCancelled:"テストを中止しました",
 shareText:"毎朝、世界の朝の実録音で目覚めるアラーム『世界の朝アラーム』。いまテスト版が公開中です。実現には、みなさんの応援とご意見が必要です。",
+shareTextCountry:n=>"『世界の朝アラーム』で " + n + " の朝の音を聞きました。毎朝ちがう世界の朝の実録音で目覚めるアラーム、いまテスト版が公開中です。",
 shareTitle:"世界の朝アラーム（テスト版）",
 copied:"コピーしました ✓", copyPrompt:"このリンクをコピーしてください",
 pvMsg:(c,p,s,r)=>"を聞いて：" + r + "。",
@@ -451,12 +445,11 @@ badge:"Every sound is a real recording, captured on location",
 testTitle:"This is a test version",
 testLead1:"This prototype tests whether an alarm that wakes you with real morning sounds from around the world can become a real app. Sounds only play while this page is open \u2014 patterns with the 'Real recording' badge play the actual recordings; the rest are stand-ins.",
 testLead2:"Whether it becomes real depends on your support and feedback. A single comment — \"I want to wake up to this sound\" or \"I want to hear a morning in this country\" — moves development forward.",
-testLead3:"The sounds from Indonesia (Ubud and Bali) and Cambodia (Phnom Penh) are actual recordings Mori captured on his trips. In the real app, those very recordings will play.",
+testLead3:"The sounds from Indonesia (Bali) and Cambodia (Phnom Penh) are actual recordings Mori captured on his trips. In the real app, those very recordings will play.",
 androidTitle:"📱 The Android app (early access) is here",
-androidLead:"The Android app (v0.2.1) is now out as an early release. Install it and use it as a real alarm. Available in Japanese, English, Vietnamese, Indonesian, Malay and Khmer. Share your impressions via the form at the bottom.",
+androidLead:"The Android app (v0.2.0) is now out as an early release. Install it and use it as a real alarm. Available in Japanese, English, Vietnamese, Indonesian, Malay and Khmer. Share your impressions via the form at the bottom.",
 androidBtn:"Download the Android app (APK, approx. " + APK_SIZE + " MB)",
 androidNote:"* Because this installs outside the Play Store, you may need to allow \"unknown apps\" in your device settings. An iPhone version is in preparation.",
-step1:"Pick your wake-up time", step2:"Just set it", step3:"Tomorrow morning, somewhere in the world",
 alarmCardTitle:"Tomorrow's Alarm",
 alarmCardLead:"No need to choose a sound. When it's time to wake up, a morning you have never heard will ring.",
 labelDays:"Repeat on", labelMood:"How about tomorrow's mood?",
@@ -522,6 +515,7 @@ dayToday:"today", dayTomorrow:"tomorrow",
 testCounting:n=>"Listen: plays in " + n + "s (press again to cancel)",
 testCancelBtn:"Stop listening", testCancelled:"Listening stopped",
 shareText:"\"World Morning Alarm\" wakes you with real morning recordings from around the world. The test version is out now — your support and feedback will make it real.",
+shareTextCountry:n=>"I listened to the morning sounds of " + n + " in \"World Morning Alarm\" — an alarm that wakes you with a different real morning recording from around the world every day. The test version is out now.",
 shareTitle:"World Morning Alarm (Test Version)",
 copied:"Copied ✓", copyPrompt:"Copy this link",
 pvMsg:(c,p,s,r)=>"Listened to [" + c + " · " + p + " | " + s + "]: " + r + ".",
@@ -539,12 +533,11 @@ badge:"Mọi âm thanh đều là bản ghi thật, ghi trực tiếp tại đ�
 testTitle:"Đây là bản thử nghiệm",
 testLead1:"B\u1ea3n m\u1eabu n\u00e0y ki\u1ec3m ch\u1ee9ng li\u1ec7u b\u00e1o th\u1ee9c \u0111\u00e1nh th\u1ee9c b\u1ea1n b\u1eb1ng \u00e2m thanh bu\u1ed5i s\u00e1ng th\u1eadt t\u1eeb kh\u1eafp th\u1ebf gi\u1edbi c\u00f3 th\u1ec3 th\u00e0nh \u1ee9ng d\u1ee5ng th\u1eadt hay kh\u00f4ng. \u00c2m thanh ch\u1ec9 ph\u00e1t khi trang \u0111ang m\u1edf \u2014 m\u1eabu c\u00f3 huy hi\u1ec7u 'Ghi th\u1eadt' ph\u00e1t b\u1ea3n ghi th\u1eadt; c\u00f2n l\u1ea1i l\u00e0 \u00e2m thanh m\u1eabu.",
 testLead2:"Việc nó có trở thành hiện thực hay không phụ thuộc vào sự ủng hộ và ý kiến của các bạn. Chỉ một câu — \"Tôi muốn thức dậy với âm thanh này\" hay \"Tôi muốn nghe buổi sáng ở đất nước này\" — cũng giúp việc phát triển tiến lên.",
-testLead3:"Các âm thanh từ Indonesia (Ubud và Bali) và Campuchia (Phnom Penh) là bản ghi thật do Mori ghi lại trong các chuyến đi của mình. Trong ứng dụng chính thức, chính những bản ghi đó sẽ vang lên.",
+testLead3:"Các âm thanh từ Indonesia (Bali) và Campuchia (Phnom Penh) là bản ghi thật do Mori ghi lại trong các chuyến đi của mình. Trong ứng dụng chính thức, chính những bản ghi đó sẽ vang lên.",
 androidTitle:"📱 Ứng dụng Android (phát hành sớm) đã có",
-androidLead:"\u1ee8ng d\u1ee5ng Android (v0.2.1) \u0111\u00e3 ph\u00e1t h\u00e0nh s\u1edbm. C\u00e0i v\u00e0o \u0111i\u1ec7n tho\u1ea1i \u0111\u1ec3 d\u00f9ng nh\u01b0 b\u00e1o th\u1ee9c th\u1eadt. Hi\u1ec7n h\u1ed7 tr\u1ee3 ti\u1ebfng Nh\u1eadt, Anh, Vi\u1ec7t, Indonesia, M\u00e3 Lai v\u00e0 Khmer. H\u00e3y g\u1eedi c\u1ea3m nh\u1eadn qua bi\u1ec3u m\u1eabu \u1edf cu\u1ed1i trang.",
+androidLead:"\u1ee8ng d\u1ee5ng Android (v0.2.0) \u0111\u00e3 ph\u00e1t h\u00e0nh s\u1edbm. C\u00e0i v\u00e0o \u0111i\u1ec7n tho\u1ea1i \u0111\u1ec3 d\u00f9ng nh\u01b0 b\u00e1o th\u1ee9c th\u1eadt. Hi\u1ec7n h\u1ed7 tr\u1ee3 ti\u1ebfng Nh\u1eadt, Anh, Vi\u1ec7t, Indonesia, M\u00e3 Lai v\u00e0 Khmer. H\u00e3y g\u1eedi c\u1ea3m nh\u1eadn qua bi\u1ec3u m\u1eabu \u1edf cu\u1ed1i trang.",
 androidBtn:"Tải ứng dụng Android (APK, khoảng " + APK_SIZE + " MB)",
 androidNote:"* Vì cài đặt ngoài Play Store, bạn có thể cần cho phép \"ứng dụng không rõ nguồn gốc\" trong cài đặt thiết bị. Phiên bản iPhone đang được chuẩn bị.",
-step1:"Chọn giờ thức dậy", step2:"Chỉ cần đặt", step3:"Sáng mai, ở một nơi nào đó trên thế giới",
 alarmCardTitle:"Báo thức ngày mai",
 alarmCardLead:"Không cần chọn âm thanh. Khi đến giờ thức dậy, một buổi sáng bạn chưa từng nghe sẽ vang lên.",
 labelDays:"Lặp lại vào", labelMood:"Tâm trạng ngày mai?",
@@ -610,6 +603,7 @@ dayToday:"hôm nay", dayTomorrow:"ngày mai",
 testCounting:n=>"Nghe thử: sẽ phát sau " + n + " giây (nhấn lần nữa để hủy)",
 testCancelBtn:"D\u1eebng nghe th\u1eed", testCancelled:"\u0110\u00e3 d\u1eebng nghe th\u1eed",
 shareText:"\"Báo thức Buổi sáng Thế giới\" đánh thức bạn bằng bản ghi buổi sáng thật từ khắp nơi trên thế giới. Bản thử nghiệm hiện đã ra mắt — sự ủng hộ và ý kiến của bạn sẽ biến nó thành hiện thực.",
+shareTextCountry:n=>"Tôi đã nghe âm thanh buổi sáng của " + n + " trong \"Báo thức Buổi sáng Thế giới\" — chiếc báo thức đánh thức bạn bằng bản ghi buổi sáng thật khác nhau từ khắp thế giới mỗi ngày. Bản thử nghiệm đã ra mắt.",
 shareTitle:"Báo thức Buổi sáng Thế giới (Bản thử nghiệm)",
 copied:"Đã sao chép ✓", copyPrompt:"Hãy sao chép liên kết này",
 pvMsg:(c,p,s,r)=>"Đã nghe [" + c + " · " + p + " | " + s + "]: " + r + ".",
@@ -626,12 +620,11 @@ badge:"Semua suara adalah rekaman asli yang direkam langsung di lokasi",
 testTitle:"Ini adalah versi uji coba",
 testLead1:"Prototipe ini menguji apakah alarm dengan rekaman asli suara pagi dari seluruh dunia bisa menjadi aplikasi sungguhan. Suara hanya berbunyi selama halaman ini terbuka \u2014 pola dengan lencana 'Rekaman asli' memutar rekaman asli; sisanya suara contoh.",
 testLead2:"Terwujud atau tidaknya bergantung pada dukungan dan masukan Anda. Satu kalimat saja — \"Saya ingin bangun dengan suara ini\" atau \"Saya ingin mendengar pagi di negara ini\" — mendorong pengembangan ke depan.",
-testLead3:"Suara dari Indonesia (Ubud dan Bali) dan Kamboja (Phnom Penh) adalah rekaman yang benar-benar direkam Mori dalam perjalanannya. Di aplikasi resminya, rekaman itulah yang akan berbunyi.",
+testLead3:"Suara dari Indonesia (Bali) dan Kamboja (Phnom Penh) adalah rekaman yang benar-benar direkam Mori dalam perjalanannya. Di aplikasi resminya, rekaman itulah yang akan berbunyi.",
 androidTitle:"📱 Aplikasi Android (akses awal) telah hadir",
-androidLead:"Aplikasi Android (v0.2.1) kini tersedia sebagai rilis awal. Pasang di ponsel dan gunakan sebagai alarm sungguhan. Tersedia dalam bahasa Jepang, Inggris, Vietnam, Indonesia, Melayu, dan Khmer. Sampaikan kesan Anda lewat formulir di bawah.",
+androidLead:"Aplikasi Android (v0.2.0) kini tersedia sebagai rilis awal. Pasang di ponsel dan gunakan sebagai alarm sungguhan. Tersedia dalam bahasa Jepang, Inggris, Vietnam, Indonesia, Melayu, dan Khmer. Sampaikan kesan Anda lewat formulir di bawah.",
 androidBtn:"Unduh aplikasi Android (APK, sekitar " + APK_SIZE + " MB)",
 androidNote:"* Karena dipasang di luar Play Store, Anda mungkin perlu mengizinkan \"aplikasi tidak dikenal\" di pengaturan perangkat. Versi iPhone sedang dipersiapkan.",
-step1:"Tentukan waktu bangun", step2:"Cukup atur", step3:"Besok pagi, di suatu tempat di dunia",
 alarmCardTitle:"Alarm Besok",
 alarmCardLead:"Tidak perlu memilih suara. Saat waktunya bangun, pagi yang belum pernah Anda dengar akan berbunyi.",
 labelDays:"Ulangi pada", labelMood:"Bagaimana suasana besok?",
@@ -697,6 +690,7 @@ dayToday:"hari ini", dayTomorrow:"besok",
 testCounting:n=>"Dengarkan: berbunyi dalam " + n + " detik (tekan lagi untuk membatalkan)",
 testCancelBtn:"Berhenti mendengarkan", testCancelled:"Pendengaran dihentikan",
 shareText:"\"Alarm Pagi Dunia\" membangunkan Anda dengan rekaman asli suara pagi dari seluruh dunia. Versi uji cobanya kini tersedia — dukungan dan masukan Anda akan mewujudkannya.",
+shareTextCountry:n=>"Saya mendengarkan suara pagi " + n + " di \"Alarm Pagi Dunia\" — alarm yang membangunkan Anda dengan rekaman asli suara pagi yang berbeda dari seluruh dunia setiap hari. Versi uji cobanya kini tersedia.",
 shareTitle:"Alarm Pagi Dunia (Versi Uji Coba)",
 copied:"Tersalin ✓", copyPrompt:"Salin tautan ini",
 pvMsg:(c,p,s,r)=>"Mendengarkan [" + c + " · " + p + " | " + s + "]: " + r + ".",
@@ -713,12 +707,11 @@ badge:"Semua bunyi adalah rakaman sebenar yang dirakam di lokasi",
 testTitle:"Ini adalah versi ujian",
 testLead1:"Prototaip ini menguji sama ada penggera dengan rakaman sebenar bunyi pagi dari seluruh dunia boleh menjadi aplikasi sebenar. Bunyi hanya berbunyi semasa halaman ini dibuka \u2014 corak dengan lencana 'Rakaman sebenar' memainkan rakaman sebenar; yang lain adalah contoh.",
 testLead2:"Sama ada ia menjadi kenyataan bergantung pada sokongan dan maklum balas anda. Satu ayat sahaja — \"Saya ingin bangun dengan bunyi ini\" atau \"Saya ingin mendengar pagi di negara ini\" — mendorong pembangunan ke hadapan.",
-testLead3:"Bunyi dari Indonesia (Ubud dan Bali) dan Kemboja (Phnom Penh) adalah rakaman yang benar-benar dirakam oleh Mori semasa perjalanannya. Dalam aplikasi sebenar, rakaman itulah yang akan berbunyi.",
+testLead3:"Bunyi dari Indonesia (Bali) dan Kemboja (Phnom Penh) adalah rakaman yang benar-benar dirakam oleh Mori semasa perjalanannya. Dalam aplikasi sebenar, rakaman itulah yang akan berbunyi.",
 androidTitle:"📱 Aplikasi Android (akses awal) telah hadir",
-androidLead:"Aplikasi Android (v0.2.1) kini tersedia sebagai keluaran awal. Pasang pada telefon dan gunakannya sebagai penggera sebenar. Tersedia dalam bahasa Jepun, Inggeris, Vietnam, Indonesia, Melayu dan Khmer. Kongsikan pandangan anda melalui borang di bawah.",
+androidLead:"Aplikasi Android (v0.2.0) kini tersedia sebagai keluaran awal. Pasang pada telefon dan gunakannya sebagai penggera sebenar. Tersedia dalam bahasa Jepun, Inggeris, Vietnam, Indonesia, Melayu dan Khmer. Kongsikan pandangan anda melalui borang di bawah.",
 androidBtn:"Muat turun aplikasi Android (APK, kira-kira " + APK_SIZE + " MB)",
 androidNote:"* Oleh kerana dipasang di luar Play Store, anda mungkin perlu membenarkan \"aplikasi tidak dikenal\" dalam tetapan peranti. Versi iPhone sedang dipersiapkan.",
-step1:"Tentukan masa bangun", step2:"Hanya tetapkan", step3:"Esok pagi, di suatu tempat di dunia",
 alarmCardTitle:"Penggera Esok",
 alarmCardLead:"Tidak perlu memilih bunyi. Apabila tiba masa bangun, pagi yang belum pernah anda dengar akan berbunyi.",
 labelDays:"Ulang pada", labelMood:"Bagaimana suasana esok?",
@@ -784,6 +777,7 @@ dayToday:"hari ini", dayTomorrow:"esok",
 testCounting:n=>"Dengarkan: berbunyi dalam " + n + " saat (tekan sekali lagi untuk batal)",
 testCancelBtn:"Berhenti mendengar", testCancelled:"Pendengaran dihentikan",
 shareText:"\"Penggera Pagi Dunia\" membangunkan anda dengan rakaman sebenar bunyi pagi dari seluruh dunia. Versi ujiannya kini tersedia — sokongan dan maklum balas anda akan mewujudkannya.",
+shareTextCountry:n=>"Saya mendengar bunyi pagi " + n + " dalam \"Penggera Pagi Dunia\" — penggera yang membangunkan anda dengan rakaman sebenar bunyi pagi yang berbeza dari seluruh dunia setiap hari. Versi ujiannya kini tersedia.",
 shareTitle:"Penggera Pagi Dunia (Versi Ujian)",
 copied:"Disalin ✓", copyPrompt:"Salin pautan ini",
 pvMsg:(c,p,s,r)=>"Mendengar [" + c + " · " + p + " | " + s + "]: " + r + ".",
@@ -800,12 +794,11 @@ badge:"សំឡេងទាំងអស់គឺជាការថតពិត 
 testTitle:"នេះគឺជាកំណែសាកល្បង",
 testLead1:"នេះគឺជាគំរូដើម ដើម្បីផ្ទៀងផ្ទាត់ថាតើម៉ោងរោទ៍ដែលដាស់អ្នកដោយសំឡេងព្រឹកពិតពីជុំវិញពិភពលោក អាចក្លាយជាកម្មវិធីពិតបានឬអត់។ សំឡេងបន្លឺតែពេលទំព័រនេះបើកប៉ុណ្ណោះ។ ទម្រង់ដែលមានស្លាក «ការថតពិត» បន្លឺការថតពិត; ទម្រង់ផ្សេងទៀតជាសំឡេងគំរូ។",
 testLead2:"វាអាចក្លាយជាការពិតបានឬអត់ អាស្រ័យលើការគាំទ្រ និងមតិយោបល់របស់អ្នក។ ត្រឹមតែមួយឃ្លា — «ខ្ញុំចង់ភ្ញាក់ជាមួយសំឡេងនេះ» ឬ «ខ្ញុំចង់ស្តាប់ព្រឹកនៅប្រទេសនេះ» — ក៏ជំរុញការអភិវឌ្ឍទៅមុខដែរ។",
-testLead3:"សំឡេងពីប្រទេសឥណ្ឌូនេស៊ី (អ៊ូប៊ុដ និងបាលី) និងកម្ពុជា (ភ្នំពេញ) គឺជាការថតពិតដែល Mori បានថតក្នុងដំណើររបស់គាត់។ នៅក្នុងកម្មវិធីពិត ការថតទាំងនោះនឹងបន្លឺ។",
+testLead3:"សំឡេងពីប្រទេសឥណ្ឌូនេស៊ី (បាលី) និងកម្ពុជា (ភ្នំពេញ) គឺជាការថតពិតដែល Mori បានថតក្នុងដំណើររបស់គាត់។ នៅក្នុងកម្មវិធីពិត ការថតទាំងនោះនឹងបន្លឺ។",
 androidTitle:"📱 កម្មវិធី Android (ចេញមុន) បានមកដល់ហើយ",
-androidLead:"\u1780\u1798\u17d2\u1798\u179c\u17b7\u1792\u17b7 Android (v0.2.1) \u1794\u17b6\u1793\u1785\u17c1\u1789\u1787\u17b6\u1780\u17c6\u178e\u17c2\u1798\u17bb\u1793\u17a0\u17c1\u1799\u17d4 \u178a\u17c6\u17a1\u17be\u1784\u179b\u17be\u1791\u17bc\u179a\u179f\u1796\u17d0\u179a\u1794\u179f\u17cb\u17a2\u17d2\u1793\u1780 \u17a0\u17c1\u1799\u1794\u17d2\u179a\u17c2\u1787\u17b6\u1798\u17c9\u17c4\u1784\u179a\u17c4\u1791\u17d0\u1796\u17b7\u178f\u17d4 \u1798\u17b6\u1793\u1787\u17b6\u1797\u17b6\u179f\u17b6\u1787\u1794\u17ca\u17bb\u1793 \u17a2\u1784\u17cb\u1782\u17d2\u179b\u17c1\u179f \u179c\u17c0\u178f\u178e\u17b6\u1798 \u17a5\u178e\u17d2\u178c\u17bc\u1793\u17c1\u179f\u17b8 \u1798\u17c9\u17c2\u17a1 \u1793\u17b7\u1784\u1781\u17d2\u1798\u17c2\u179a\u17d4 \u179f\u17bc\u1798\u1785\u17c2\u179b\u179a\u17c6\u179b\u17c1\u1780\u1785\u17c6\u178e\u17b6\u1794\u17cb\u17a2\u17b6\u179a\u1798\u17d0\u17cb\u179a\u1794\u179f\u17cb\u17a2\u17d2\u1793\u1780\u178f\u17b6\u1798\u179a\u1799\u17c6\u178f\u17d2\u179a\u17c1\u1784\u1780\u17d2\u179a\u17c1\u17c1\u1798\u17d4",
+androidLead:"\u1780\u1798\u17d2\u1798\u179c\u17b7\u1792\u17b7 Android (v0.2.0) \u1794\u17b6\u1793\u1785\u17c1\u1789\u1787\u17b6\u1780\u17c6\u178e\u17c2\u1798\u17bb\u1793\u17a0\u17c1\u1799\u17d4 \u178a\u17c6\u17a1\u17be\u1784\u179b\u17be\u1791\u17bc\u179a\u179f\u1796\u17d0\u179a\u1794\u179f\u17cb\u17a2\u17d2\u1793\u1780 \u17a0\u17c1\u1799\u1794\u17d2\u179a\u17c2\u1787\u17b6\u1798\u17c9\u17c4\u1784\u179a\u17c4\u1791\u17d0\u1796\u17b7\u178f\u17d4 \u1798\u17b6\u1793\u1787\u17b6\u1797\u17b6\u179f\u17b6\u1787\u1794\u17ca\u17bb\u1793 \u17a2\u1784\u17cb\u1782\u17d2\u179b\u17c1\u179f \u179c\u17c0\u178f\u178e\u17b6\u1798 \u17a5\u178e\u17d2\u178c\u17bc\u1793\u17c1\u179f\u17b8 \u1798\u17c9\u17c2\u17a1 \u1793\u17b7\u1784\u1781\u17d2\u1798\u17c2\u179a\u17d4 \u179f\u17bc\u1798\u1785\u17c2\u179b\u179a\u17c6\u179b\u17c1\u1780\u1785\u17c6\u178e\u17b6\u1794\u17cb\u17a2\u17b6\u179a\u1798\u17d0\u17cb\u179a\u1794\u179f\u17cb\u17a2\u17d2\u1793\u1780\u178f\u17b6\u1798\u179a\u1799\u17c6\u178f\u17d2\u179a\u17c1\u1784\u1780\u17d2\u179a\u17c1\u17c1\u1798\u17d4",
 androidBtn:"ទាញយកកម្មវិធី Android (APK ប្រហែល " + APK_SIZE + " MB)",
 androidNote:"* ដោយសារការដំឡើងនៅក្រៅ Play Store អ្នកប្រហែលជាត្រូវអនុញ្ញាត «កម្មវិធីមិនស្គាល់ប្រភព» នៅក្នុងការកំណត់ឧបករណ៍។ កំណែ iPhone កំពុងត្រូវបានរៀបចំ។",
-step1:"កំណត់ម៉ោងភ្ញាក់របស់អ្នក", step2:"គ្រាន់តែកំណត់វា", step3:"ព្រឹកស្អែក នៅកន្លែងណាមួយលើពិភពលោក",
 alarmCardTitle:"ម៉ោងរោទ៍ថ្ងៃស្អែក",
 alarmCardLead:"មិនចាំបាច់ជ្រើសសំឡេងទេ។ នៅពេលដល់ម៉ោងភ្ញាក់ ព្រឹកដែលអ្នកមិនធ្លាប់ឮនឹងបន្លឺ។",
 labelDays:"ធ្វើម្តងទៀតនៅ", labelMood:"អារម្មណ៍ថ្ងៃស្អែកយ៉ាងម៉េចដែរ?",
@@ -871,6 +864,7 @@ dayToday:"ថ្ងៃនេះ", dayTomorrow:"ថ្ងៃស្អែក",
 testCounting:n=>"ស្តាប់សាកល្បង៖ នឹងរោទ៍ក្នុងរយៈពេល " + n + " វិនាទី (ចុចម្តងទៀតដើម្បីបោះបង់)",
 testCancelBtn:"បញ្ឈប់ការស្តាប់", testCancelled:"បានបញ្ឈប់ការស្តាប់",
 shareText:"«ម៉ោងរោទ៍ព្រឹកពិភពលោក» ដាស់អ្នកដោយការថតព្រឹកពិតពីជុំវិញពិភពលោក។ កំណែសាកល្បងឥឡូវនេះបានចេញហើយ — ការគាំទ្រ និងមតិរបស់អ្នកនឹងធ្វើឱ្យវាក្លាយជាការពិត។",
+shareTextCountry:n=>"ខ្ញុំបានស្តាប់សំឡេងព្រឹករបស់ " + n + " ក្នុង «ម៉ោងរោទ៍ព្រឹកពិភពលោក» — ម៉ោងរោទ៍ដែលដាស់អ្នកដោយការថតព្រឹកពិតខុសៗគ្នាពីជុំវិញពិភពលោករាល់ថ្ងៃ។ កំណែសាកល្បងបានចេញហើយ។",
 shareTitle:"ម៉ោងរោទ៍ព្រឹកពិភពលោក (កំណែសាកល្បង)",
 copied:"បានចម្លង ✓", copyPrompt:"សូមចម្លងតំណនេះ",
 pvMsg:(c,p,s,r)=>"បានស្តាប់ [" + c + " · " + p + " | " + s + "]៖ " + r + "។",
@@ -931,7 +925,6 @@ const COUNTRIES = [
    story:{ja:"ガムランの音色と鶏の声が、ゆっくり朝を運んできます。",en:"The tones of gamelan and the calls of roosters slowly carry the morning in.",vi:"Âm sắc của gamelan và tiếng gà gáy từ từ mang buổi sáng đến.",id:"Nada gamelan dan suara ayam perlahan membawa pagi datang.",ms:"Nada gamelan dan suara ayam perlahan membawa pagi datang.",km:"សំឡេងហ្គាមេឡាន និងសំឡេងមាន់ នាំព្រឹកមកបន្តិចម្តងៗ។"},
    patterns:[
     {id:"id-jogja", kind:"gamelan", place:{ja:"ジョグジャカルタ",en:"Yogyakarta",vi:"Yogyakarta",id:"Yogyakarta",ms:"Yogyakarta",km:"យ៉ូកយ៉ាការតា"}, sound:{ja:"ガムラン",en:"Gamelan",vi:"Nhạc gamelan",id:"Gamelan",ms:"Gamelan",km:"ហ្គាមេឡាន"}},
-    {id:"id-bali", kind:"birds", real:true, file:"sounds/id-ubud-mountainpath.mp3", place:{ja:"ウブド",en:"Ubud",vi:"Ubud",id:"Ubud",ms:"Ubud",km:"អ៊ូប៊ុដ"}, sound:{ja:"山道の鳥と虫",en:"Birds and insects on a mountain path",vi:"Tiếng chim và côn trùng trên đường núi",id:"Burung dan serangga di jalan pegunungan",ms:"Burung dan serangga di laluan gunung",km:"សត្វស្លាប និងសត្វល្អិតនៅលើផ្លូវភ្នំ"}},
     {id:"id-bali-live", kind:"birds", real:true, file:"sounds/id-bali-live-birds.mp3", place:{ja:"バリ島",en:"Bali",vi:"Bali",id:"Bali",ms:"Bali",km:"បាលី"}, sound:{ja:"鳥と虫の合唱",en:"Chorus of birds and insects",vi:"Hòa ca của chim và côn trùng",id:"Paduan suara burung dan serangga",ms:"Korus burung dan serangga",km:"សំឡេងសត្វស្លាប និងសត្វល្អិត"}},
     {id:"id-jakarta", kind:"rooster", place:{ja:"ジャカルタ",en:"Jakarta",vi:"Jakarta",id:"Jakarta",ms:"Jakarta",km:"ហ្សាការតា"}, sound:{ja:"朝の街角と鶏",en:"Morning street corner and roosters",vi:"Góc phố buổi sáng và tiếng gà",id:"Sudut jalan pagi dan ayam jantan",ms:"Sudut jalan pagi dan ayam jantan",km:"ជ្រុងផ្លូវពេលព្រឹក និងមាន់"}},
   ]},
@@ -1037,16 +1030,36 @@ function nextPattern(){
 
 // ===== コレクション表示 =====
 const listEl = document.getElementById("countryList");
+// 国別シェア用アイコン（全体シェアと同じSVG）
+const SHARE_ICONS = {
+  x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H4.08l4.713 6.231 5.451-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644z"/></svg>',
+  line: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11.1c0 4 3.4 7.3 8 7.3.3 0 .7-.1.9.1l.1.1c.1.1.2.3.2.4l.1.9c0 .3.2.6.6.6.1 0 .2 0 .3-.1l.1-.1s1.1-.7 2.2-1.7c2.8-1.2 4.5-3.2 4.5-5.5C22 6.6 17.5 3 12 3z"/><text x="12" y="13.4" text-anchor="middle" font-size="4.4" font-weight="800" fill="#fff">LINE</text></svg>',
+  fb: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>',
+  threads: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><text x="12" y="16.2" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">@</text></svg>'
+};
+function countryShareRow(c){
+  const text = encodeURIComponent(t("shareTextCountry")(c.flag + " " + L(c.country)));
+  const url = encodeURIComponent(location.href);
+  return `<div class="share-row country-share">`
+    + `<a target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${text}&url=${url}">${SHARE_ICONS.x}<span>X</span></a>`
+    + `<a target="_blank" rel="noopener" href="https://social-plugins.line.me/lineit/share?url=${url}">${SHARE_ICONS.line}<span>LINE</span></a>`
+    + `<a target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=${url}">${SHARE_ICONS.fb}<span>Facebook</span></a>`
+    + `<a target="_blank" rel="noopener" href="https://www.threads.net/intent/post?text=${text}%20${url}">${SHARE_ICONS.threads}<span>Threads</span></a>`
+    + `</div>`;
+}
 function renderCollection(playingId){
   listEl.innerHTML = "";
   COUNTRIES.forEach(c=>{
     const heardCount = c.patterns.filter(p=>heard.has(p.id)).length;
     const d = document.createElement("div");
     d.className = "country" + (c.patterns.some(p=>p.id===playingId) ? " playing" : "");
+    d.style.setProperty("--country-bg", `url("images/bg-${c.id}.webp")`);
     let html = `<div class="head"><span class="name">${c.flag} ${L(c.country)}</span><span class="prog">${t("heardCount")(heardCount)}</span></div>`;
     c.patterns.forEach(p=>{
-      html += `<div class="pattern"><span><span class="place">${L(p.place)}</span>　<span class="sound">${L(p.sound)}</span>${p.real ? ' <span class="real">' + t("realBadge") + '</span>' : ""}</span><span style="display:flex;align-items:center;gap:8px"><span class="stamp">${heard.has(p.id) ? t("wokeStamp") : ""}</span><button class="pv" data-pv="${p.id}" type="button">${t("listenBtn")}</button></span></div>`;
+      const isPreviewing = (typeof preview !== "undefined" && preview && preview.id===p.id);
+      html += `<div class="pattern"><span><span class="place">${L(p.place)}</span>　<span class="sound">${L(p.sound)}</span>${p.real ? ' <span class="real">' + t("realBadge") + '</span>' : ""}</span><span style="display:flex;align-items:center;gap:8px"><span class="stamp">${heard.has(p.id) ? t("wokeStamp") : ""}</span><button class="pv${isPreviewing ? " on" : ""}" data-pv="${p.id}" type="button">${isPreviewing ? t("stopBtnSmall") : t("listenBtn")}</button></span></div>`;
     });
+    html += countryShareRow(c);
     d.innerHTML = html;
     listEl.appendChild(d);
   });
@@ -1057,10 +1070,12 @@ function renderCollection(playingId){
     listEl.appendChild(d);
   });
   const countriesHeard = COUNTRIES.filter(c=>c.patterns.some(p=>heard.has(p.id))).length;
+  // 削除されたパターンの記録が残っていても集計が崩れないよう、現行パターンだけを数える
+  const heardValid = [...heard].filter(id=>ALL_PATTERNS.some(p=>p.id===id)).length;
   document.getElementById("wakeStat").textContent = wakes;
-  document.getElementById("patternStat").textContent = heard.size;
+  document.getElementById("patternStat").textContent = heardValid;
   document.getElementById("countryStat").textContent = countriesHeard;
-  document.getElementById("barFill").style.width = (heard.size/TOTAL_PATTERNS*100)+"%";
+  document.getElementById("barFill").style.width = (heardValid/TOTAL_PATTERNS*100)+"%";
 }
 
 // ===== 合成オーディオ（試し聞き用イメージ音・フェードイン） =====
@@ -1122,7 +1137,13 @@ let realAudio = null;
 function stopRealAudio(){
   if(!realAudio) return;
   const a = realAudio; realAudio = null;
-  const iv = setInterval(()=>{ a.volume = Math.max(0, a.volume - 0.12); if(a.volume <= 0){ clearInterval(iv); try{ a.pause(); }catch(e){} } }, 60);
+  // 【停止の確実化】iOS Safari では HTMLAudioElement の volume を JS から変更できず
+  // （読み出しても常に 1 のまま）、音量フェードで volume が 0 になるのを待つ方式だと
+  // pause() に永遠に到達せず、ループ再生が止まらない不具合があった。
+  // 停止は音量に頼らず pause() を即時・確実に実行する。
+  try{ a.pause(); }catch(e){}
+  try{ a.currentTime = 0; }catch(e){}
+  try{ a.removeAttribute("src"); a.load(); }catch(e){}
 }
 function playPatternSound(p){
   if(p && p.file){
@@ -1136,11 +1157,13 @@ function playPatternSound(p){
     const iv = setInterval(()=>{ if(realAudio !== a){ clearInterval(iv); return; } a.volume = Math.min(target, a.volume + step); if(a.volume >= target) clearInterval(iv); }, 125);
     timers.push(iv);
   } else {
+    stopRealAudio();
     playKind(p.kind);
   }
 }
 function startAlarm(pattern){
   audio(); clearTimeout(snoozeTimer);
+  if(preview) stopPreview(false); // 試し聞き中なら先に確実に止めてから鳴らす
   playing = pattern || nextPattern();
   rampIn(prefs.fade ? 15 : 2);
   playPatternSound(playing);
@@ -1188,7 +1211,7 @@ document.getElementById("setBtn").onclick = ()=>{
 let testTimer = null;
 document.getElementById("playNowBtn").onclick = ()=>{
   if(testTimer){ clearTimeout(testTimer); testTimer = null; document.getElementById("status").textContent = t("testCancelled"); document.getElementById("playNowBtn").textContent = t("playNowBtn"); return; }
-  fadeOut(); playing=null;
+  if(preview) stopPreview(false); else { fadeOut(); playing=null; }
   let n = 3;
   const btn = document.getElementById("playNowBtn");
   document.getElementById("status").textContent = t("testCounting")(n);
