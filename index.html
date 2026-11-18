@@ -75,7 +75,6 @@
   #status{text-align:center;font-size:14px;color:var(--accent);min-height:24px;margin-top:14px;line-height:1.7;font-weight:700}
   #nowPlaying{text-align:center;font-size:14px;line-height:1.9;min-height:56px;color:var(--muted)}
   #nowPlaying .country{font-size:22px;font-weight:800;color:var(--text);display:block}
-  #nowPlaying .pattern{font-size:14px;font-weight:700;color:var(--accent);display:block}
   #nowPlaying .story{font-size:12px;color:var(--muted);display:block;margin-top:6px;line-height:1.8}
   .label{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.08em;margin:18px 0 8px}
   .days{display:flex;gap:6px}
@@ -108,7 +107,6 @@
   .country .prog{font-size:11px;color:var(--muted)}
   .pattern{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--bluegrey);font-size:12px}
   .pattern .place{color:var(--text);font-weight:700}
-  .pattern .sound{color:var(--muted)}
   .pattern .stamp{color:var(--stamp);font-weight:800;white-space:nowrap}
   .country.locked{opacity:.55;filter:grayscale(.8);background:var(--bluegrey2)}
   details{margin-top:6px}
@@ -418,7 +416,7 @@ testCancelBtn:"テストを中止する", testCancelled:"テストを中止し�
 shareText:"毎朝、世界の朝の実録音で目覚めるアラーム『世界の朝アラーム』。いまテスト版が公開中です。実現には、みなさんの応援とご意見が必要です。",
 shareTitle:"世界の朝アラーム（テスト版）",
 copied:"コピーしました ✓", copyPrompt:"このリンクをコピーしてください",
-pvMsg:(c,p,s,r)=>"を聞いて：" + r + "。",
+pvMsg:(c,p,s,r)=>"[" + c + "・" + p + "] を聞いて：" + r + "。",
 fbKind:"", fbBody:"", fbContactTag:""
 },
 en:{
@@ -504,7 +502,7 @@ testCancelBtn:"Stop listening", testCancelled:"Listening stopped",
 shareText:"\"World Morning Alarm\" wakes you with real morning recordings from around the world. The test version is out now — your support and feedback will make it real.",
 shareTitle:"World Morning Alarm (Test Version)",
 copied:"Copied ✓", copyPrompt:"Copy this link",
-pvMsg:(c,p,s,r)=>"Listened to [" + c + " · " + p + " | " + s + "]: " + r + ".",
+pvMsg:(c,p,s,r)=>"Listened to [" + c + " · " + p + "]: " + r + ".",
 fbKind:"[Type] ", fbBody:"[Message] ", fbContactTag:"[Contact] "
 }
 };
@@ -591,7 +589,7 @@ testCancelBtn:"D\u1eebng nghe th\u1eed", testCancelled:"\u0110\u00e3 d\u1eebng n
 shareText:"\"Báo thức Buổi sáng Thế giới\" đánh thức bạn bằng bản ghi buổi sáng thật từ khắp nơi trên thế giới. Bản thử nghiệm hiện đã ra mắt — sự ủng hộ và ý kiến của bạn sẽ biến nó thành hiện thực.",
 shareTitle:"Báo thức Buổi sáng Thế giới (Bản thử nghiệm)",
 copied:"Đã sao chép ✓", copyPrompt:"Hãy sao chép liên kết này",
-pvMsg:(c,p,s,r)=>"Đã nghe [" + c + " · " + p + " | " + s + "]: " + r + ".",
+pvMsg:(c,p,s,r)=>"Đã nghe [" + c + " · " + p + "]: " + r + ".",
 fbKind:"", fbBody:"", fbContactTag:""
 };
 I18N.id = {
@@ -677,7 +675,7 @@ testCancelBtn:"Berhenti mendengarkan", testCancelled:"Pendengaran dihentikan",
 shareText:"\"Alarm Pagi Dunia\" membangunkan Anda dengan rekaman asli suara pagi dari seluruh dunia. Versi uji cobanya kini tersedia — dukungan dan masukan Anda akan mewujudkannya.",
 shareTitle:"Alarm Pagi Dunia (Versi Uji Coba)",
 copied:"Tersalin ✓", copyPrompt:"Salin tautan ini",
-pvMsg:(c,p,s,r)=>"Mendengarkan [" + c + " · " + p + " | " + s + "]: " + r + ".",
+pvMsg:(c,p,s,r)=>"Mendengarkan [" + c + " · " + p + "]: " + r + ".",
 fbKind:"", fbBody:"", fbContactTag:""
 };
 I18N.ms = {
@@ -763,7 +761,7 @@ testCancelBtn:"Berhenti mendengar", testCancelled:"Pendengaran dihentikan",
 shareText:"\"Penggera Pagi Dunia\" membangunkan anda dengan rakaman sebenar bunyi pagi dari seluruh dunia. Versi ujiannya kini tersedia — sokongan dan maklum balas anda akan mewujudkannya.",
 shareTitle:"Penggera Pagi Dunia (Versi Ujian)",
 copied:"Disalin ✓", copyPrompt:"Salin pautan ini",
-pvMsg:(c,p,s,r)=>"Mendengar [" + c + " · " + p + " | " + s + "]: " + r + ".",
+pvMsg:(c,p,s,r)=>"Mendengar [" + c + " · " + p + "]: " + r + ".",
 fbKind:"", fbBody:"", fbContactTag:""
 };
 I18N.km = {
@@ -849,7 +847,7 @@ testCancelBtn:"បញ្ឈប់ការស្តាប់", testCancelled:"�
 shareText:"«ម៉ោងរោទ៍ព្រឹកពិភពលោក» ដាស់អ្នកដោយការថតព្រឹកពិតពីជុំវិញពិភពលោក។ កំណែសាកល្បងឥឡូវនេះបានចេញហើយ — ការគាំទ្រ និងមតិរបស់អ្នកនឹងធ្វើឱ្យវាក្លាយជាការពិត។",
 shareTitle:"ម៉ោងរោទ៍ព្រឹកពិភពលោក (កំណែសាកល្បង)",
 copied:"បានចម្លង ✓", copyPrompt:"សូមចម្លងតំណនេះ",
-pvMsg:(c,p,s,r)=>"បានស្តាប់ [" + c + " · " + p + " | " + s + "]៖ " + r + "។",
+pvMsg:(c,p,s,r)=>"បានស្តាប់ [" + c + " · " + p + "]៖ " + r + "។",
 fbKind:"", fbBody:"", fbContactTag:""
 };
 
@@ -1001,7 +999,7 @@ function renderCollection(playingId){
     let html = `<div class="head"><span class="name">${c.flag} ${L(c.country)}</span><span class="prog">${t("heardCount")(heardCount)}</span></div>`;
     c.patterns.forEach(p=>{
       const isPreviewing = (typeof preview !== "undefined" && preview && preview.id===p.id);
-      html += `<div class="pattern"><span><span class="place">${L(p.place)}</span>　<span class="sound">${L(p.sound)}</span>${p.real ? ' <span class="real">' + t("realBadge") + '</span>' : ""}</span><span style="display:flex;align-items:center;gap:8px;flex:none"><button class="pv${isPreviewing ? " on" : ""}" data-pv="${p.id}" type="button">${isPreviewing ? t("stopBtnSmall") : t("listenBtn")}</button></span></div>`;
+      html += `<div class="pattern"><span><span class="place">${L(p.place)}</span>${p.real ? ' <span class="real">' + t("realBadge") + '</span>' : ""}</span><span style="display:flex;align-items:center;gap:8px;flex:none"><button class="pv${isPreviewing ? " on" : ""}" data-pv="${p.id}" type="button">${isPreviewing ? t("stopBtnSmall") : t("listenBtn")}</button></span></div>`;
     });
     d.innerHTML = html;
     listEl.appendChild(d);
@@ -1112,7 +1110,7 @@ function startAlarm(pattern){
   playPatternSound(playing);
   document.getElementById("wakeCard").style.display = "block";
   document.getElementById("nowPlaying").innerHTML =
-    `${t("nowPlayingIntro")}<span class="country">${playing.flag} ${L(playing.country)}｜${L(playing.place)}</span><span class="pattern">${L(playing.sound)}</span><span class="story">${L(playing.story)}</span>`;
+    `${t("nowPlayingIntro")}<span class="country">${playing.flag} ${L(playing.country)}｜${L(playing.place)}</span><span class="story">${L(playing.story)}</span>`;
   document.getElementById("status").textContent = t("statusRinging")(L(playing.country), L(playing.place));
   document.getElementById("wakeCard").scrollIntoView({behavior:"smooth", block:"center"});
   renderCollection(playing.id);
