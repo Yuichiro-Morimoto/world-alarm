@@ -92,12 +92,6 @@
   .switch i::after{content:"";position:absolute;width:24px;height:24px;background:#fff;border-radius:50%;top:3px;left:3px;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
   .switch input:checked + i{background:var(--accent)}
   .switch input:checked + i::after{left:25px}
-  .stats{display:flex;gap:10px;margin-bottom:14px}
-  .stat{flex:1;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 6px;text-align:center}
-  .stat .num{font-size:20px;font-weight:800}
-  .stat .label{font-size:10px;color:var(--muted);margin-top:2px}
-  .bar{height:6px;background:#fff;border:1px solid var(--line);border-radius:99px;overflow:hidden}
-  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ink2),var(--ink));width:0%}
   .country{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px;position:relative;overflow:hidden}
   .country::before{content:"";position:absolute;inset:0;background-image:var(--country-bg,none);background-size:100% auto;background-position:center bottom;background-repeat:no-repeat;opacity:.42;pointer-events:none}
   .country>*{position:relative}
@@ -228,12 +222,6 @@
   <div class="card bluegrey">
     <h2 data-i18n="collectionTitle">あなたの朝の旅</h2>
     <p class="lead" data-i18n="collectionLead">まずは気になる音をタップして、聞いてみてください。目覚めるたびに、旅先がひとつずつ増えていきます。</p>
-    <div class="stats">
-      <div class="stat"><div class="num" id="wakeStat">0</div><div class="label" data-i18n="statWakes">目覚めた回数</div></div>
-      <div class="stat"><div class="num" id="countryStat">0</div><div class="label" data-i18n="statCountries">目覚めた国</div></div>
-      <div class="stat"><div class="num" id="patternStat">0</div><div class="label" data-i18n="statPatterns">聞いた朝の音</div></div>
-    </div>
-    <div class="bar"><i id="barFill"></i></div>
     <div id="pvAsk"><div class="q" data-i18n="pvAskQ">聞いてみて、どうでしたか？</div><div class="row"><button type="button" data-rate="good">😊 <span data-i18n="rateGood">よかった</span></button><button type="button" data-rate="ok">😐 <span data-i18n="rateOk">ふつう</span></button><button type="button" data-rate="bad">😖 <span data-i18n="rateBad">イマイチ</span></button></div></div>
     <div id="countryList"></div>
     <p class="note" style="margin-top:14px" data-i18n="collectionNote">新しい国や音は、アップデートで少しずつ増えていきます。次はラオス、ネパール、トルコなどを予定しています。</p>
@@ -992,11 +980,10 @@ const listEl = document.getElementById("countryList");
 function renderCollection(playingId){
   listEl.innerHTML = "";
   COUNTRIES.forEach(c=>{
-    const heardCount = c.patterns.filter(p=>heard.has(p.id)).length;
     const d = document.createElement("div");
     d.className = "country" + (c.patterns.some(p=>p.id===playingId) ? " playing" : "");
     d.style.setProperty("--country-bg", `url("images/bg-${c.id}.webp")`);
-    let html = `<div class="head"><span class="name">${c.flag} ${L(c.country)}</span><span class="prog">${t("heardCount")(heardCount)}</span></div>`;
+    let html = `<div class="head"><span class="name">${c.flag} ${L(c.country)}</span></div>`;
     c.patterns.forEach(p=>{
       const isPreviewing = (typeof preview !== "undefined" && preview && preview.id===p.id);
       html += `<div class="pattern"><span><span class="place">${L(p.place)}</span>${p.real ? ' <span class="real">' + t("realBadge") + '</span>' : ""}</span><span style="display:flex;align-items:center;gap:8px;flex:none"><button class="pv${isPreviewing ? " on" : ""}" data-pv="${p.id}" type="button">${isPreviewing ? t("stopBtnSmall") : t("listenBtn")}</button></span></div>`;
@@ -1010,13 +997,6 @@ function renderCollection(playingId){
     d.innerHTML = `<div class="head"><span class="name">${c.flag} ${L(c.country)}</span><span class="prog">${t("comingSoon")}</span></div>`;
     listEl.appendChild(d);
   });
-  const countriesHeard = COUNTRIES.filter(c=>c.patterns.some(p=>heard.has(p.id))).length;
-  // 削除されたパターンの記録が残っていても集計が崩れないよう、現行パターンだけを数える
-  const heardValid = [...heard].filter(id=>ALL_PATTERNS.some(p=>p.id===id)).length;
-  document.getElementById("wakeStat").textContent = wakes;
-  document.getElementById("patternStat").textContent = heardValid;
-  document.getElementById("countryStat").textContent = countriesHeard;
-  document.getElementById("barFill").style.width = (heardValid/TOTAL_PATTERNS*100)+"%";
 }
 
 // ===== 合成オーディオ（試し聞き用イメージ音・フェードイン） =====
