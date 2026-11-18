@@ -100,7 +100,7 @@
   .bar{height:6px;background:#fff;border:1px solid var(--line);border-radius:99px;overflow:hidden}
   .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ink2),var(--ink));width:0%}
   .country{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:12px;position:relative;overflow:hidden}
-  .country::before{content:"";position:absolute;inset:0;background-image:var(--country-bg,none);background-size:cover;background-position:center;opacity:.15;pointer-events:none}
+  .country::before{content:"";position:absolute;inset:0;background-image:var(--country-bg,none);background-size:100% auto;background-position:center bottom;background-repeat:no-repeat;opacity:.35;pointer-events:none}
   .country>*{position:relative}
   .country.playing{outline:2px solid var(--ink2)}
   .country .head{display:flex;justify-content:space-between;align-items:baseline}
@@ -124,7 +124,8 @@
   .sheet select,.sheet textarea,.sheet input[type="text"]{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;font-size:14px;background:#fff;color:var(--ink)}
   .sheet textarea{min-height:110px;resize:vertical}
 
-  .pv{flex:none;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:700;cursor:pointer}
+  .pv{flex:none;flex-shrink:0;white-space:nowrap;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:700;cursor:pointer}
+  .pattern>span:first-child{min-width:0}
   .pv.on{background:var(--accent);color:#fff;border-color:var(--accent)}
   #pvAsk{display:none;margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
   #pvAsk .q{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px}
@@ -190,7 +191,7 @@
   <div class="card">
     <h2 data-i18n="androidTitle">📱 Android版（先行配布）ができました</h2>
     <p class="lead" data-i18n="androidLead">Webの試作品に続いて、Androidアプリ版（v0.2.1）の先行配布を始めました。スマホにインストールすれば、実際のアラームとして使えます。アプリは日本語・英語・ベトナム語・インドネシア語・マレー語・クメール語に対応しました。使ってみた感想は、ページ下部のフォームから聞かせてください。</p>
-    <a class="primary" id="androidBtn" href="https://github.com/Yuichiro-Morimoto/world-alarm/releases/download/v0.2.1/world-alarm-release.apk" style="display:block;text-align:center;text-decoration:none;padding:14px;border-radius:12px">Android版をダウンロード（APK・約4.2MB）</a>
+    <a class="primary" id="androidBtn" data-i18n="androidBtn" href="https://github.com/Yuichiro-Morimoto/world-alarm/releases/download/v0.2.1/world-alarm-release.apk" style="display:block;text-align:center;text-decoration:none;padding:14px;border-radius:12px">Android版をダウンロード（APK・約4.2MB）</a>
     <p class="note" style="margin-top:10px" data-i18n="androidNote">※ Playストア外からのインストールのため、端末の設定で「提供元不明のアプリ」の許可が必要な場合があります。iPhone版は準備中です。</p>
   </div>
 
@@ -891,15 +892,13 @@ const COUNTRIES = [
    patterns:[
     {id:"vn-hoian", kind:"market", place:{ja:"ホイアン",en:"Hoi An",vi:"Hội An",id:"Hoi An",ms:"Hoi An",km:"ហូយអាន"}, sound:{ja:"朝市",en:"Morning market",vi:"Chợ buổi sáng",id:"Pasar pagi",ms:"Pasar pagi",km:"ផ្សារពេលព្រឹក"}},
     {id:"vn-danang", kind:"ocean", place:{ja:"ダナン",en:"Da Nang",vi:"Đà Nẵng",id:"Da Nang",ms:"Da Nang",km:"ដាណាង"}, sound:{ja:"海辺の朝",en:"Morning by the sea",vi:"Buổi sáng bên biển",id:"Pagi di tepi laut",ms:"Pagi di tepi laut",km:"ព្រឹកនៅមាត់សមុទ្រ"}},
-    {id:"vn-hanoi", kind:"birds", place:{ja:"ハノイ",en:"Hanoi",vi:"Hà Nội",id:"Hanoi",ms:"Hanoi",km:"ហាណូយ"}, sound:{ja:"湖畔の鳥",en:"Birds by the lake",vi:"Tiếng chim bên hồ",id:"Burung di tepi danau",ms:"Burung di tepi tasik",km:"សត្វស្លាបនៅមាត់បឹង"}},
   ]},
   {id:"id", flag:"🇮🇩",
    country:{ja:"インドネシア",en:"Indonesia",vi:"Indonesia",id:"Indonesia",ms:"Indonesia",km:"ឥណ្ឌូនេស៊ី"},
-   story:{ja:"ガムランの音色と鶏の声が、ゆっくり朝を運んできます。",en:"The tones of gamelan and the calls of roosters slowly carry the morning in.",vi:"Âm sắc của gamelan và tiếng gà gáy từ từ mang buổi sáng đến.",id:"Nada gamelan dan suara ayam perlahan membawa pagi datang.",ms:"Nada gamelan dan suara ayam perlahan membawa pagi datang.",km:"សំឡេងហ្គាមេឡាន និងសំឡេងមាន់ នាំព្រឹកមកបន្តិចម្តងៗ។"},
+   story:{ja:"ガムランの音色と、鳥と虫の合唱が、ゆっくり朝を運んできます。",en:"The tones of gamelan and a chorus of birds and insects slowly carry the morning in.",vi:"Âm sắc của gamelan và hòa ca của chim và côn trùng từ từ mang buổi sáng đến.",id:"Nada gamelan dan paduan suara burung dan serangga perlahan membawa pagi datang.",ms:"Nada gamelan dan korus burung dan serangga perlahan membawa pagi datang.",km:"សំឡេងហ្គាមេឡាន និងសំឡេងសត្វស្លាប និងសត្វល្អិត នាំព្រឹកមកបន្តិចម្តងៗ។"},
    patterns:[
     {id:"id-jogja", kind:"gamelan", place:{ja:"ジョグジャカルタ",en:"Yogyakarta",vi:"Yogyakarta",id:"Yogyakarta",ms:"Yogyakarta",km:"យ៉ូកយ៉ាការតា"}, sound:{ja:"ガムラン",en:"Gamelan",vi:"Nhạc gamelan",id:"Gamelan",ms:"Gamelan",km:"ហ្គាមេឡាន"}},
     {id:"id-bali-live", kind:"birds", real:true, file:"sounds/id-bali-live-birds.mp3", place:{ja:"バリ島",en:"Bali",vi:"Bali",id:"Bali",ms:"Bali",km:"បាលី"}, sound:{ja:"鳥と虫の合唱",en:"Chorus of birds and insects",vi:"Hòa ca của chim và côn trùng",id:"Paduan suara burung dan serangga",ms:"Korus burung dan serangga",km:"សំឡេងសត្វស្លាប និងសត្វល្អិត"}},
-    {id:"id-jakarta", kind:"rooster", place:{ja:"ジャカルタ",en:"Jakarta",vi:"Jakarta",id:"Jakarta",ms:"Jakarta",km:"ហ្សាការតា"}, sound:{ja:"朝の街角と鶏",en:"Morning street corner and roosters",vi:"Góc phố buổi sáng và tiếng gà",id:"Sudut jalan pagi dan ayam jantan",ms:"Sudut jalan pagi dan ayam jantan",km:"ជ្រុងផ្លូវពេលព្រឹក និងមាន់"}},
   ]},
   {id:"my", flag:"🇲🇾",
    country:{ja:"マレーシア",en:"Malaysia",vi:"Malaysia",id:"Malaysia",ms:"Malaysia",km:"ម៉ាឡេស៊ី"},
@@ -907,15 +906,13 @@ const COUNTRIES = [
    patterns:[
     {id:"my-kk", kind:"birds", place:{ja:"コタキナバル",en:"Kota Kinabalu",vi:"Kota Kinabalu",id:"Kota Kinabalu",ms:"Kota Kinabalu",km:"កូតាគីណាបាលូ"}, sound:{ja:"熱帯の鳥の合唱",en:"Chorus of tropical birds",vi:"Hòa ca chim nhiệt đới",id:"Paduan suara burung tropis",ms:"Korus burung tropika",km:"សំឡេងសត្វស្លាបត្រូពិច"}},
     {id:"my-penang", kind:"market", place:{ja:"ペナン",en:"Penang",vi:"Penang",id:"Penang",ms:"Penang",km:"ពីណាំង"}, sound:{ja:"コピティアムの朝",en:"Morning at a kopitiam",vi:"Buổi sáng ở quán kopitiam",id:"Pagi di kopitiam",ms:"Pagi di kopitiam",km:"ព្រឹកនៅហាងកូពីទីអាំ"}},
-    {id:"my-kl", kind:"bell", place:{ja:"クアラルンプール",en:"Kuala Lumpur",vi:"Kuala Lumpur",id:"Kuala Lumpur",ms:"Kuala Lumpur",km:"គូឡាឡាំពួ"}, sound:{ja:"朝の街の鐘",en:"Bells in the morning city",vi:"Chuông trong thành phố buổi sáng",id:"Lonceng kota di pagi hari",ms:"Loceng bandar pada waktu pagi",km:"កណ្ដឹងទីក្រុងពេលព្រឹក"}},
   ]},
   {id:"ph", flag:"🇵🇭",
    country:{ja:"フィリピン",en:"Philippines",vi:"Philippines",id:"Filipina",ms:"Filipina",km:"ហ្វីលីពីន"},
-   story:{ja:"波の音と教会の鐘。海のそばの朝は、少しゆっくり流れます。",en:"The sound of waves and church bells. Mornings by the sea flow a little more slowly.",vi:"Tiếng sóng và chuông nhà thờ. Buổi sáng bên biển trôi qua chậm rãi hơn một chút.",id:"Suara ombak dan lonceng gereja. Pagi di tepi laut mengalir sedikit lebih lambat.",ms:"Bunyi ombak dan loceng gereja. Pagi di tepi laut mengalir sedikit lebih perlahan.",km:"សំឡេងរលក និងកណ្ដឹងព្រះវិហារ។ ព្រឹកនៅក្បែរសមុទ្រ ហូរយឺតជាងបន្តិច។"},
+   story:{ja:"波の音と、港の朝の気配。海のそばの朝は、少しゆっくり流れます。",en:"The sound of waves and a harbor waking up. Mornings by the sea flow a little more slowly.",vi:"Tiếng sóng và bến cảng buổi sáng. Buổi sáng bên biển trôi qua chậm rãi hơn một chút.",id:"Suara ombak dan pelabuhan di pagi hari. Pagi di tepi laut mengalir sedikit lebih lambat.",ms:"Bunyi ombak dan pelabuhan pada waktu pagi. Pagi di tepi laut mengalir sedikit lebih perlahan.",km:"សំឡេងរលក និងកំពង់ផែពេលព្រឹក។ ព្រឹកនៅក្បែរសមុទ្រ ហូរយឺតជាងបន្តិច។"},
    patterns:[
     {id:"ph-cebu-sea", kind:"ocean", place:{ja:"セブ",en:"Cebu",vi:"Cebu",id:"Cebu",ms:"Cebu",km:"សេប៊ូ"}, sound:{ja:"海辺の朝",en:"Morning by the sea",vi:"Buổi sáng bên biển",id:"Pagi di tepi laut",ms:"Pagi di tepi laut",km:"ព្រឹកនៅមាត់សមុទ្រ"}},
     {id:"ph-oslob", kind:"market", place:{ja:"オスロブ",en:"Oslob",vi:"Oslob",id:"Oslob",ms:"Oslob",km:"អូស្លុប"}, sound:{ja:"朝の港",en:"Morning harbor",vi:"Bến cảng buổi sáng",id:"Pelabuhan pagi",ms:"Pelabuhan pagi",km:"កំពង់ផែពេលព្រឹក"}},
-    {id:"ph-cebu-bell", kind:"bell", place:{ja:"セブ",en:"Cebu",vi:"Cebu",id:"Cebu",ms:"Cebu",km:"សេប៊ូ"}, sound:{ja:"教会の鐘",en:"Church bell",vi:"Chuông nhà thờ",id:"Lonceng gereja",ms:"Loceng gereja",km:"កណ្ដឹងព្រះវិហារ"}},
   ]},
   {id:"kh", flag:"🇰🇭",
    country:{ja:"カンボジア",en:"Cambodia",vi:"Campuchia",id:"Kamboja",ms:"Kemboja",km:"កម្ពុជា"},
@@ -923,7 +920,6 @@ const COUNTRIES = [
    patterns:[
     {id:"kh-siemreap", kind:"bell", place:{ja:"シェムリアップ",en:"Siem Reap",vi:"Siem Reap",id:"Siem Reap",ms:"Siem Reap",km:"សៀមរាប"}, sound:{ja:"托鉢の鐘",en:"Bell of the alms round",vi:"Chuông khất thực",id:"Lonceng pemberian sedekah",ms:"Loceng pusingan sedekah",km:"កណ្ដឹងបិណ្ឌបាត"}},
     {id:"kh-mekong", kind:"ocean", real:true, file:"sounds/kh-phnompenh-morning.mp3", place:{ja:"プノンペン",en:"Phnom Penh",vi:"Phnom Penh",id:"Phnom Penh",ms:"Phnom Penh",km:"ភ្នំពេញ"}, sound:{ja:"朝の通りの音",en:"Sounds of a morning street",vi:"Âm thanh đường phố buổi sáng",id:"Suara jalan di pagi hari",ms:"Bunyi jalan pada waktu pagi",km:"សំឡេងផ្លូវពេលព្រឹក"}},
-    {id:"kh-mondulkiri", kind:"birds", place:{ja:"モンドルキリ",en:"Mondulkiri",vi:"Mondulkiri",id:"Mondulkiri",ms:"Mondulkiri",km:"មណ្ឌលគីរី"}, sound:{ja:"高原の鳥",en:"Birds of the highlands",vi:"Tiếng chim vùng cao",id:"Burung dataran tinggi",ms:"Burung tanah tinggi",km:"សត្វស្លាបតំបន់ខ្ពស់"}},
   ]},
 ];
 const LOCKED = [
@@ -1005,7 +1001,7 @@ function renderCollection(playingId){
     let html = `<div class="head"><span class="name">${c.flag} ${L(c.country)}</span><span class="prog">${t("heardCount")(heardCount)}</span></div>`;
     c.patterns.forEach(p=>{
       const isPreviewing = (typeof preview !== "undefined" && preview && preview.id===p.id);
-      html += `<div class="pattern"><span><span class="place">${L(p.place)}</span>　<span class="sound">${L(p.sound)}</span>${p.real ? ' <span class="real">' + t("realBadge") + '</span>' : ""}</span><span style="display:flex;align-items:center;gap:8px"><button class="pv${isPreviewing ? " on" : ""}" data-pv="${p.id}" type="button">${isPreviewing ? t("stopBtnSmall") : t("listenBtn")}</button></span></div>`;
+      html += `<div class="pattern"><span><span class="place">${L(p.place)}</span>　<span class="sound">${L(p.sound)}</span>${p.real ? ' <span class="real">' + t("realBadge") + '</span>' : ""}</span><span style="display:flex;align-items:center;gap:8px;flex:none"><button class="pv${isPreviewing ? " on" : ""}" data-pv="${p.id}" type="button">${isPreviewing ? t("stopBtnSmall") : t("listenBtn")}</button></span></div>`;
     });
     d.innerHTML = html;
     listEl.appendChild(d);
