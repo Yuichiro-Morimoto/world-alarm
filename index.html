@@ -885,14 +885,6 @@ b.onclick = ()=>{ lang = b.dataset.lang; try{ localStorage.setItem("asa_lang", l
 
 // ===== 音源カタログ：国 > パターン（場所・音）の2階層／本番は現地の実録音 =====
 const COUNTRIES = [
-  {id:"th", flag:"🇹🇭",
-   country:{ja:"タイ",en:"Thailand",vi:"Thái Lan",id:"Thailand",ms:"Thailand",km:"ថៃ"},
-   story:{ja:"朝の寺では鐘が響き、屋台が一日を始めます。",en:"At morning temples the bells ring out, and food stalls begin their day.",vi:"Ở những ngôi chùa buổi sáng, tiếng chuông vang lên và các quầy hàng bắt đầu một ngày mới.",id:"Di kuil pagi hari lonceng berbunyi, dan warung-warung memulai harinya.",ms:"Di kuil pagi hari loceng berbunyi, dan gerai-gerai memulakan harinya.",km:"នៅវត្តពេលព្រឹក កណ្ដឹងបន្លឺ ហើយតូបលក់ចាប់ផ្តើមថ្ងៃរបស់ពួកគេ។"},
-   patterns:[
-    {id:"th-ayutthaya", kind:"bell", place:{ja:"アユタヤ",en:"Ayutthaya",vi:"Ayutthaya",id:"Ayutthaya",ms:"Ayutthaya",km:"អយុធ្យា"}, sound:{ja:"寺の鐘",en:"Temple bell",vi:"Chuông chùa",id:"Lonceng kuil",ms:"Loceng kuil",km:"កណ្ដឹងវត្ត"}},
-    {id:"th-bangkok-market", kind:"market", place:{ja:"バンコク",en:"Bangkok",vi:"Bangkok",id:"Bangkok",ms:"Bangkok",km:"បាងកក"}, sound:{ja:"朝市",en:"Morning market",vi:"Chợ buổi sáng",id:"Pasar pagi",ms:"Pasar pagi",km:"ផ្សារពេលព្រឹក"}},
-    {id:"th-chaophraya", kind:"ocean", place:{ja:"バンコク",en:"Bangkok",vi:"Bangkok",id:"Bangkok",ms:"Bangkok",km:"បាងកក"}, sound:{ja:"チャオプラヤー川辺",en:"Chao Phraya riverside",vi:"Bờ sông Chao Phraya",id:"Tepi Sungai Chao Phraya",ms:"Tepi Sungai Chao Phraya",km:"មាត់ទន្លេចៅប្រាយ៉ា"}},
-  ]},
   {id:"vn", flag:"🇻🇳",
    country:{ja:"ベトナム",en:"Vietnam",vi:"Việt Nam",id:"Vietnam",ms:"Vietnam",km:"វៀតណាម"},
    story:{ja:"バイクの波と市場の声で、街が一斉に動き出します。",en:"With waves of motorbikes and the voices of the market, the city starts moving all at once.",vi:"Với làn sóng xe máy và tiếng nói của chợ, thành phố đồng loạt chuyển động.",id:"Dengan gelombang sepeda motor dan suara pasar, kota mulai bergerak serentak.",ms:"Dengan gelombang motosikal dan suara pasar, bandar mula bergerak serentak.",km:"ជាមួយរលកម៉ូតូ និងសំឡេងផ្សារ ទីក្រុងចាប់ផ្តើមផ្លាស់ទីទាំងអស់គ្នា។"},
@@ -924,14 +916,6 @@ const COUNTRIES = [
     {id:"ph-cebu-sea", kind:"ocean", place:{ja:"セブ",en:"Cebu",vi:"Cebu",id:"Cebu",ms:"Cebu",km:"សេប៊ូ"}, sound:{ja:"海辺の朝",en:"Morning by the sea",vi:"Buổi sáng bên biển",id:"Pagi di tepi laut",ms:"Pagi di tepi laut",km:"ព្រឹកនៅមាត់សមុទ្រ"}},
     {id:"ph-oslob", kind:"market", place:{ja:"オスロブ",en:"Oslob",vi:"Oslob",id:"Oslob",ms:"Oslob",km:"អូស្លុប"}, sound:{ja:"朝の港",en:"Morning harbor",vi:"Bến cảng buổi sáng",id:"Pelabuhan pagi",ms:"Pelabuhan pagi",km:"កំពង់ផែពេលព្រឹក"}},
     {id:"ph-cebu-bell", kind:"bell", place:{ja:"セブ",en:"Cebu",vi:"Cebu",id:"Cebu",ms:"Cebu",km:"សេប៊ូ"}, sound:{ja:"教会の鐘",en:"Church bell",vi:"Chuông nhà thờ",id:"Lonceng gereja",ms:"Loceng gereja",km:"កណ្ដឹងព្រះវិហារ"}},
-  ]},
-  {id:"kr", flag:"🇰🇷",
-   country:{ja:"韓国",en:"South Korea",vi:"Hàn Quốc",id:"Korea Selatan",ms:"Korea Selatan",km:"កូរ៉េខាងត្បូង"},
-   story:{ja:"市場の呼び声と、寺の木を打つ静かな音が対照的です。",en:"The calls of the market contrast with the quiet sound of wood struck at a temple.",vi:"Tiếng gọi của chợ tương phản với âm thanh yên tĩnh của gỗ được gõ trong chùa.",id:"Panggilan pasar berbanding kontras dengan suara kayu yang dipukul dengan tenang di kuil.",ms:"Panggilan pasar berbeza dengan bunyi kayu yang dipukul dengan tenang di kuil.",km:"សំឡេងហៅនៃផ្សារ ផ្ទុយនឹងសំឡេងឈើដែលគោះដោយស្ងប់ស្ងាត់នៅវត្ត។"},
-   patterns:[
-    {id:"kr-seoul-market", kind:"market", place:{ja:"ソウル",en:"Seoul",vi:"Seoul",id:"Seoul",ms:"Seoul",km:"សេអ៊ូល"}, sound:{ja:"市場の朝",en:"Morning market",vi:"Chợ buổi sáng",id:"Pasar pagi",ms:"Pasar pagi",km:"ផ្សារពេលព្រឹក"}},
-    {id:"kr-seoul-moktak", kind:"moktak", place:{ja:"ソウル",en:"Seoul",vi:"Seoul",id:"Seoul",ms:"Seoul",km:"សេអ៊ូល"}, sound:{ja:"寺の木鐸",en:"Wooden bell at a temple",vi:"Chuông gỗ trong chùa",id:"Moktak (lonceng kayu) di kuil",ms:"Moktak (loceng kayu) di kuil",km:"កណ្ដឹងឈើនៅវត្ត"}},
-    {id:"kr-busan", kind:"ocean", place:{ja:"釜山",en:"Busan",vi:"Busan",id:"Busan",ms:"Busan",km:"ប៊ូសាន"}, sound:{ja:"海辺の市場",en:"Seaside market",vi:"Chợ ven biển",id:"Pasar tepi laut",ms:"Pasar tepi laut",km:"ផ្សារនៅមាត់សមុទ្រ"}},
   ]},
   {id:"kh", flag:"🇰🇭",
    country:{ja:"カンボジア",en:"Cambodia",vi:"Campuchia",id:"Kamboja",ms:"Kemboja",km:"កម្ពុជា"},
