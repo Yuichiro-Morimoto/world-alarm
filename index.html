@@ -12,19 +12,19 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <link rel="manifest" href="manifest.webmanifest">
-<title>世界の朝アラーム（テスト版）</title>
+<title>世界の音で目覚める（テスト版）</title>
 <meta name="description" id="metaDesc" content="毎朝ちがう、世界の朝の実録音で目覚めるアラームアプリ。同じ音に慣れて起きられない「アラーム症候群」対策に。全パターンを聞き終わるまで同じ音はくり返されません。インドネシア・カンボジアなど現地録音の朝の音を収録。Android版を先行配布中、6言語対応。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://yuichiro-morimoto.github.io/world-alarm/">
-<meta property="og:title" id="ogTitle" content="世界の朝アラーム（テスト版）">
+<meta property="og:title" id="ogTitle" content="世界の音で目覚める（テスト版）">
 <meta property="og:description" id="ogDesc" content="毎朝ちがう、世界の朝の実録音で目覚めるアラームアプリ。同じ音に慣れて起きられない「アラーム症候群」対策に。全パターンを聞き終わるまで同じ音はくり返されません。インドネシア・カンボジアなど現地録音の朝の音を収録。Android版を先行配布中、6言語対応。">
 <meta name="twitter:card" content="summary">
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
  "@type": "SoftwareApplication",
- "name": "世界の朝アラーム",
- "alternateName": "World Morning Alarm",
+ "name": "世界の音で目覚める",
+ "alternateName": "Wake Up to the Sounds of the World",
  "applicationCategory": "LifestyleApplication",
  "operatingSystem": "Android",
  "softwareVersion": "0.2.1",
@@ -331,7 +331,7 @@
 const APK_SIZE = "4.3";
 const I18N = {
 ja:{
-title:"世界の朝アラーム（テスト版）",
+title:"世界の音で目覚める（テスト版）",
 desc:"毎朝ちがう、世界の朝の実録音で目覚めるアラームアプリ。同じ音に慣れて起きられない「アラーム症候群」対策に。全パターンを聞き終わるまで同じ音はくり返されません。インドネシア・カンボジアなど現地録音の朝の音を収録。Android版を先行配布中、6言語対応。",
 kicker:"毎朝ちがう音のアラーム",
 hook:"いつも同じアラーム音、<br>聞くだけで憂鬱になっていませんか？",
@@ -410,14 +410,14 @@ statusSet:(day,time)=>"セットしました：" + day + " " + time + " に起�
 dayToday:"今日", dayTomorrow:"明日",
 testCounting:n=>"試聴：" + n + "秒後に鳴ります（もう一度押すと中止）",
 testCancelBtn:"テストを中止する", testCancelled:"テストを中止しました",
-shareText:"毎朝、世界の朝の実録音で目覚めるアラーム『世界の朝アラーム』。いまテスト版が公開中です。実現には、みなさんの応援とご意見が必要です。",
-shareTitle:"世界の朝アラーム（テスト版）",
+shareText:"毎朝、世界の朝の実録音で目覚めるアラーム『世界の音で目覚める』。いまテスト版が公開中です。実現には、みなさんの応援とご意見が必要です。",
+shareTitle:"世界の音で目覚める（テスト版）",
 copied:"コピーしました ✓", copyPrompt:"このリンクをコピーしてください",
 pvMsg:(c,p,s,r)=>"[" + c + "・" + p + "] を聞いて：" + r + "。",
 fbKind:"", fbBody:"", fbContactTag:""
 },
 en:{
-title:"World Morning Alarm (Test Version)",
+title:"Wake Up to the Sounds of the World (Test Version)",
 desc:"An alarm app that wakes you to a different real morning recording from around the world every day \u2014 a fresh answer to 'alarm syndrome', when the same sound stops waking you. Sounds never repeat until you have heard them all. Recorded on location in Indonesia, Cambodia and more. Android early release, in 6 languages.",
 kicker:"AN ALARM WITH A DIFFERENT SOUND EVERY MORNING",
 hook:"Tired of the same alarm sound every morning?<br>Does just hearing it make you gloomy?",
@@ -496,15 +496,15 @@ statusSet:(day,time)=>"Set: waking you " + day + " at " + time + ". Good night �
 dayToday:"today", dayTomorrow:"tomorrow",
 testCounting:n=>"Listen: plays in " + n + "s (press again to cancel)",
 testCancelBtn:"Stop listening", testCancelled:"Listening stopped",
-shareText:"\"World Morning Alarm\" wakes you with real morning recordings from around the world. The test version is out now — your support and feedback will make it real.",
-shareTitle:"World Morning Alarm (Test Version)",
+shareText:"\"Wake Up to the Sounds of the World\" wakes you with real morning recordings from around the world. The test version is out now — your support and feedback will make it real.",
+shareTitle:"Wake Up to the Sounds of the World (Test Version)",
 copied:"Copied ✓", copyPrompt:"Copy this link",
 pvMsg:(c,p,s,r)=>"Listened to [" + c + " · " + p + "]: " + r + ".",
 fbKind:"[Type] ", fbBody:"[Message] ", fbContactTag:"[Contact] "
 }
 };
 I18N.vi = {
-title:"Báo thức Buổi sáng Thế giới (Bản thử nghiệm)",
+title:"Thức dậy cùng âm thanh thế giới (Bản thử nghiệm)",
 desc:"\u1ee8ng d\u1ee5ng b\u00e1o th\u1ee9c \u0111\u00e1nh th\u1ee9c b\u1ea1n m\u1ed7i ng\u00e0y b\u1eb1ng m\u1ed9t b\u1ea3n ghi bu\u1ed5i s\u00e1ng th\u1eadt kh\u00e1c nhau t\u1eeb kh\u1eafp th\u1ebf gi\u1edbi \u2014 c\u00e1ch m\u1edbi \u0111\u1ec3 \u0111\u1ed1i ph\u00f3 'h\u1ed9i ch\u1ee9ng b\u00e1o th\u1ee9c' khi c\u00f9ng m\u1ed9t \u00e2m thanh kh\u00f4ng c\u00f2n \u0111\u00e1nh th\u1ee9c \u0111\u01b0\u1ee3c b\u1ea1n. \u00c2m thanh kh\u00f4ng l\u1eb7p l\u1ea1i cho \u0111\u1ebfn khi b\u1ea1n nghe h\u1ebft. Ghi tr\u1ef1c ti\u1ebfp t\u1ea1i Indonesia, Campuchia v\u00e0 nhi\u1ec1u n\u01a1i kh\u00e1c. Ph\u00e1t h\u00e0nh s\u1edbm tr\u00ean Android, h\u1ed7 tr\u1ee3 6 ng\u00f4n ng\u1eef.",
 kicker:"BÁO THỨC VỚI ÂM THANH KHÁC NHAU MỖI SÁNG",
 hook:"Bạn có chán âm thanh báo thức giống nhau mỗi sáng không?<br>Chỉ nghe thôi cũng thấy u ám?",
@@ -583,14 +583,14 @@ statusSet:(day,time)=>"Đã đặt: sẽ đánh thức bạn " + day + " lúc " 
 dayToday:"hôm nay", dayTomorrow:"ngày mai",
 testCounting:n=>"Nghe thử: sẽ phát sau " + n + " giây (nhấn lần nữa để hủy)",
 testCancelBtn:"D\u1eebng nghe th\u1eed", testCancelled:"\u0110\u00e3 d\u1eebng nghe th\u1eed",
-shareText:"\"Báo thức Buổi sáng Thế giới\" đánh thức bạn bằng bản ghi buổi sáng thật từ khắp nơi trên thế giới. Bản thử nghiệm hiện đã ra mắt — sự ủng hộ và ý kiến của bạn sẽ biến nó thành hiện thực.",
-shareTitle:"Báo thức Buổi sáng Thế giới (Bản thử nghiệm)",
+shareText:"\"Thức dậy cùng âm thanh thế giới\" đánh thức bạn bằng bản ghi buổi sáng thật từ khắp nơi trên thế giới. Bản thử nghiệm hiện đã ra mắt — sự ủng hộ và ý kiến của bạn sẽ biến nó thành hiện thực.",
+shareTitle:"Thức dậy cùng âm thanh thế giới (Bản thử nghiệm)",
 copied:"Đã sao chép ✓", copyPrompt:"Hãy sao chép liên kết này",
 pvMsg:(c,p,s,r)=>"Đã nghe [" + c + " · " + p + "]: " + r + ".",
 fbKind:"", fbBody:"", fbContactTag:""
 };
 I18N.id = {
-title:"Alarm Pagi Dunia (Versi Uji Coba)",
+title:"Bangun dengan Suara Dunia (Versi Uji Coba)",
 desc:"Aplikasi alarm yang membangunkan Anda setiap hari dengan rekaman asli pagi yang berbeda dari seluruh dunia \u2014 jawaban baru untuk 'sindrom alarm', saat suara yang sama tak lagi membangunkan. Suara tidak berulang sampai Anda mendengar semuanya. Direkam langsung di Indonesia, Kamboja, dan lainnya. Rilis awal Android, dalam 6 bahasa.",
 kicker:"ALARM DENGAN SUARA BERBEDA SETIAP PAGI",
 hook:"Bosan dengan suara alarm yang sama setiap pagi?<br>Hanya mendengarnya saja sudah membuat murung?",
@@ -669,14 +669,14 @@ statusSet:(day,time)=>"Diatur: membangunkan Anda " + day + " pukul " + time + ".
 dayToday:"hari ini", dayTomorrow:"besok",
 testCounting:n=>"Dengarkan: berbunyi dalam " + n + " detik (tekan lagi untuk membatalkan)",
 testCancelBtn:"Berhenti mendengarkan", testCancelled:"Pendengaran dihentikan",
-shareText:"\"Alarm Pagi Dunia\" membangunkan Anda dengan rekaman asli suara pagi dari seluruh dunia. Versi uji cobanya kini tersedia — dukungan dan masukan Anda akan mewujudkannya.",
-shareTitle:"Alarm Pagi Dunia (Versi Uji Coba)",
+shareText:"\"Bangun dengan Suara Dunia\" membangunkan Anda dengan rekaman asli suara pagi dari seluruh dunia. Versi uji cobanya kini tersedia — dukungan dan masukan Anda akan mewujudkannya.",
+shareTitle:"Bangun dengan Suara Dunia (Versi Uji Coba)",
 copied:"Tersalin ✓", copyPrompt:"Salin tautan ini",
 pvMsg:(c,p,s,r)=>"Mendengarkan [" + c + " · " + p + "]: " + r + ".",
 fbKind:"", fbBody:"", fbContactTag:""
 };
 I18N.ms = {
-title:"Penggera Pagi Dunia (Versi Ujian)",
+title:"Bangun dengan Bunyi Dunia (Versi Ujian)",
 desc:"Aplikasi penggera yang membangunkan anda setiap hari dengan rakaman sebenar pagi yang berbeza dari seluruh dunia \u2014 jawapan baharu kepada 'sindrom penggera', apabila bunyi yang sama tidak lagi membangunkan anda. Bunyi tidak berulang sehingga anda mendengar semuanya. Dirakam di lokasi di Indonesia, Kemboja dan lain-lain. Keluaran awal Android, dalam 6 bahasa.",
 kicker:"PENGGERA DENGAN BUNYI BERBEZA SETIAP PAGI",
 hook:"Bosan dengan bunyi penggera yang sama setiap pagi?<br>Mendengarnya sahaja sudah membuat anda murung?",
@@ -755,14 +755,14 @@ statusSet:(day,time)=>"Ditetapkan: membangunkan anda " + day + " pada " + time +
 dayToday:"hari ini", dayTomorrow:"esok",
 testCounting:n=>"Dengarkan: berbunyi dalam " + n + " saat (tekan sekali lagi untuk batal)",
 testCancelBtn:"Berhenti mendengar", testCancelled:"Pendengaran dihentikan",
-shareText:"\"Penggera Pagi Dunia\" membangunkan anda dengan rakaman sebenar bunyi pagi dari seluruh dunia. Versi ujiannya kini tersedia — sokongan dan maklum balas anda akan mewujudkannya.",
-shareTitle:"Penggera Pagi Dunia (Versi Ujian)",
+shareText:"\"Bangun dengan Bunyi Dunia\" membangunkan anda dengan rakaman sebenar bunyi pagi dari seluruh dunia. Versi ujiannya kini tersedia — sokongan dan maklum balas anda akan mewujudkannya.",
+shareTitle:"Bangun dengan Bunyi Dunia (Versi Ujian)",
 copied:"Disalin ✓", copyPrompt:"Salin pautan ini",
 pvMsg:(c,p,s,r)=>"Mendengar [" + c + " · " + p + "]: " + r + ".",
 fbKind:"", fbBody:"", fbContactTag:""
 };
 I18N.km = {
-title:"ម៉ោងរោទ៍ព្រឹកពិភពលោក (កំណែសាកល្បង)",
+title:"ភ្ញាក់ពីគេងជាមួយសំឡេងពិភពលោក (កំណែសាកល្បង)",
 desc:"កម្មវិធីម៉ោងរោទ៍ដែលដាស់អ្នករាល់ថ្ងៃដោយការថតព្រឹកពិតខុសៗគ្នាពីជុំវិញពិភពលោក — ចម្លើយថ្មីសម្រាប់ «ជំងឺម៉ោងរោទ៍» នៅពេលសំឡេងដដែលលែងដាស់អ្នកបាន។ សំឡេងមិនបន្លឺដដែល រហូតដល់អ្នកស្តាប់គ្រប់ទម្រង់។ ថតផ្ទាល់នៅឥណ្ឌូនេស៊ី កម្ពុជា និងកន្លែងផ្សេងទៀត។ ចេញមុនលើ Android មាន 6 ភាសា។",
 kicker:"ម៉ោងរោទ៍ដែលមានសំឡេងខុសគ្នារៀងរាល់ព្រឹក",
 hook:"ធុញទ្រាន់នឹងសំឡេងម៉ោងរោទ៍ដដែលៗរាល់ព្រឹកមែនទេ?<br>គ្រាន់តែឮក៏មានអារម្មណ៍អាប់អួរហើយ?",
@@ -841,8 +841,8 @@ statusSet:(day,time)=>"បានកំណត់៖ នឹងដាស់អ្�
 dayToday:"ថ្ងៃនេះ", dayTomorrow:"ថ្ងៃស្អែក",
 testCounting:n=>"ស្តាប់សាកល្បង៖ នឹងរោទ៍ក្នុងរយៈពេល " + n + " វិនាទី (ចុចម្តងទៀតដើម្បីបោះបង់)",
 testCancelBtn:"បញ្ឈប់ការស្តាប់", testCancelled:"បានបញ្ឈប់ការស្តាប់",
-shareText:"«ម៉ោងរោទ៍ព្រឹកពិភពលោក» ដាស់អ្នកដោយការថតព្រឹកពិតពីជុំវិញពិភពលោក។ កំណែសាកល្បងឥឡូវនេះបានចេញហើយ — ការគាំទ្រ និងមតិរបស់អ្នកនឹងធ្វើឱ្យវាក្លាយជាការពិត។",
-shareTitle:"ម៉ោងរោទ៍ព្រឹកពិភពលោក (កំណែសាកល្បង)",
+shareText:"«ភ្ញាក់ពីគេងជាមួយសំឡេងពិភពលោក» ដាស់អ្នកដោយការថតព្រឹកពិតពីជុំវិញពិភពលោក។ កំណែសាកល្បងឥឡូវនេះបានចេញហើយ — ការគាំទ្រ និងមតិរបស់អ្នកនឹងធ្វើឱ្យវាក្លាយជាការពិត។",
+shareTitle:"ភ្ញាក់ពីគេងជាមួយសំឡេងពិភពលោក (កំណែសាកល្បង)",
 copied:"បានចម្លង ✓", copyPrompt:"សូមចម្លងតំណនេះ",
 pvMsg:(c,p,s,r)=>"បានស្តាប់ [" + c + " · " + p + "]៖ " + r + "។",
 fbKind:"", fbBody:"", fbContactTag:""
