@@ -111,7 +111,6 @@
   .pattern{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--bluegrey);font-size:12px}
   .pattern .place{color:var(--text);font-weight:700}
   .pattern .stamp{color:var(--stamp);font-weight:800;white-space:nowrap}
-  .pattern .fb{font-size:11px;color:var(--muted);text-decoration:underline;white-space:nowrap;align-self:center}
   .country.locked{opacity:.55;filter:grayscale(.8);background:var(--bluegrey2)}
   details{margin-top:6px}
   summary{font-size:13px;font-weight:700;color:var(--accent);cursor:pointer;padding:6px 0}
@@ -232,7 +231,7 @@
   <div class="card bluegrey">
     <h2 data-i18n="collectionTitle">あなたの朝の旅</h2>
     <p class="lead" data-i18n="collectionLead">まずは気になる音をタップして、聞いてみてください。目覚めるたびに、旅先がひとつずつ増えていきます。</p>
-    <div id="pvAsk"><div class="q" data-i18n="pvAskQ">聞いてみて、どうでしたか？</div><div class="row"><button type="button" data-rate="good">😊 <span data-i18n="rateGood">よかった</span></button><button type="button" data-rate="ok">😐 <span data-i18n="rateOk">ふつう</span></button><button type="button" data-rate="bad">😖 <span data-i18n="rateBad">イマイチ</span></button></div></div>
+    <div id="pvAsk"><div class="q" data-i18n="pvAskQ">聞いてみて、どうでしたか？</div><div class="row"><button type="button" data-rate="good">👍 <span data-i18n="rateGood">よかった</span></button><button type="button" data-rate="bad">👎 <span data-i18n="rateBad">イマイチ</span></button></div></div>
     <div id="countryList"></div>
     <p class="note" style="margin-top:14px" data-i18n="collectionNote">新しい国や音は、アップデートで少しずつ増えていきます。次はラオス、ネパール、トルコなどを予定しています。</p>
   </div>
@@ -359,7 +358,7 @@ wakeTitle:"おはようございます", stopBtn:"起きた", snoozeBtn:"あと5
 collectionTitle:"あなたの朝の旅",
 collectionLead:"まずは気になる音をタップして、聞いてみてください。目覚めるたびに、旅先がひとつずつ増えていきます。",
 statWakes:"目覚めた回数", statCountries:"目覚めた国", statPatterns:"聞いた朝の音",
-pvAskQ:"聞いてみて、どうでしたか？", rateGood:"よかった", rateOk:"ふつう", rateBad:"イマイチ",
+pvAskQ:"聞いてみて、どうでしたか？",rateThanks:"ありがとうございます", rateGood:"よかった", rateOk:"ふつう", rateBad:"イマイチ",
 collectionNote:"新しい国や音は、アップデートで少しずつ増えていきます。次はラオス、ネパール、トルコなどを予定しています。",
 aboutTitle:"このアプリについて",
 faq1q:"なぜ「毎朝ちがう音」なの？",
@@ -445,7 +444,7 @@ wakeTitle:"Good morning", stopBtn:"I'm up", snoozeBtn:"Sleep 5 more minutes",
 collectionTitle:"Your Morning Journey",
 collectionLead:"Tap a sound that catches your eye and have a listen. Every time you wake up, a new destination is added.",
 statWakes:"Wake-ups", statCountries:"Countries", statPatterns:"Morning sounds heard",
-pvAskQ:"How was it?", rateGood:"Loved it", rateOk:"Okay", rateBad:"Not for me",
+pvAskQ:"How was it?",rateThanks:"Thanks for rating!", rateGood:"Loved it", rateOk:"Okay", rateBad:"Not for me",
 collectionNote:"New countries and sounds will be added little by little in updates. Laos, Nepal, Türkiye and more are planned next.",
 aboutTitle:"About this app",
 faq1q:"Why a different sound every morning?",
@@ -532,7 +531,7 @@ wakeTitle:"Chào buổi sáng", stopBtn:"Tôi dậy rồi", snoozeBtn:"Ngủ th�
 collectionTitle:"Hành trình buổi sáng của bạn",
 collectionLead:"Hãy chạm vào âm thanh bạn tò mò và nghe thử. Mỗi lần thức dậy, một điểm đến mới sẽ được thêm vào.",
 statWakes:"Số lần thức dậy", statCountries:"Số quốc gia", statPatterns:"Âm thanh đã nghe",
-pvAskQ:"Bạn thấy thế nào?", rateGood:"Rất thích", rateOk:"Bình thường", rateBad:"Không hợp",
+pvAskQ:"Bạn thấy thế nào?",rateThanks:"Cảm ơn bạn!", rateGood:"Rất thích", rateOk:"Bình thường", rateBad:"Không hợp",
 collectionNote:"Các quốc gia và âm thanh mới sẽ được thêm dần qua các bản cập nhật. Tiếp theo dự kiến là Lào, Nepal, Thổ Nhĩ Kỳ và nhiều nơi khác.",
 aboutTitle:"Về ứng dụng này",
 faq1q:"Vì sao lại là \"âm thanh khác nhau mỗi sáng\"?",
@@ -618,7 +617,7 @@ wakeTitle:"Selamat pagi", stopBtn:"Saya bangun", snoozeBtn:"Tidur 5 menit lagi",
 collectionTitle:"Perjalanan Pagi Anda",
 collectionLead:"Ketuk suara yang menarik perhatian Anda dan dengarkan. Setiap kali bangun, satu destinasi baru bertambah.",
 statWakes:"Jumlah bangun", statCountries:"Negara", statPatterns:"Suara pagi didengar",
-pvAskQ:"Bagaimana menurut Anda?", rateGood:"Suka", rateOk:"Biasa saja", rateBad:"Kurang cocok",
+pvAskQ:"Bagaimana menurut Anda?",rateThanks:"Terima kasih!", rateGood:"Suka", rateOk:"Biasa saja", rateBad:"Kurang cocok",
 collectionNote:"Negara dan suara baru akan ditambahkan sedikit demi sedikit melalui pembaruan. Berikutnya direncanakan Laos, Nepal, Turki, dan lainnya.",
 aboutTitle:"Tentang aplikasi ini",
 faq1q:"Mengapa \"suara berbeda setiap pagi\"?",
@@ -704,7 +703,7 @@ wakeTitle:"Selamat pagi", stopBtn:"Saya sudah bangun", snoozeBtn:"Tidur 5 minit 
 collectionTitle:"Perjalanan Pagi Anda",
 collectionLead:"Ketik bunyi yang menarik perhatian anda dan dengarkan. Setiap kali bangun, satu destinasi baharu ditambah.",
 statWakes:"Bilangan bangun", statCountries:"Negara", statPatterns:"Bunyi pagi didengar",
-pvAskQ:"Bagaimana menurut anda?", rateGood:"Suka", rateOk:"Biasa sahaja", rateBad:"Kurang sesuai",
+pvAskQ:"Bagaimana menurut anda?",rateThanks:"Terima kasih!", rateGood:"Suka", rateOk:"Biasa sahaja", rateBad:"Kurang sesuai",
 collectionNote:"Negara dan bunyi baharu akan ditambah sedikit demi sedikit melalui kemas kini. Seterusnya dirancang Laos, Nepal, Turki dan lain-lain.",
 aboutTitle:"Tentang aplikasi ini",
 faq1q:"Mengapa \"bunyi berbeza setiap pagi\"?",
@@ -790,7 +789,7 @@ wakeTitle:"អរុណសួស្តី", stopBtn:"ខ្ញុំភ្ញា
 collectionTitle:"ដំណើរពេលព្រឹករបស់អ្នក",
 collectionLead:"ប៉ះសំឡេងដែលទាក់ទាញអ្នក ហើយស្តាប់មើល។ រាល់ពេលអ្នកភ្ញាក់ គោលដៅថ្មីមួយនឹងត្រូវបានបន្ថែម។",
 statWakes:"ចំនួនដងភ្ញាក់", statCountries:"ប្រទេស", statPatterns:"សំឡេងព្រឹកបានស្តាប់",
-pvAskQ:"តើអ្នកយល់យ៉ាងណាដែរ?", rateGood:"ចូលចិត្តណាស់", rateOk:"ធម្មតា", rateBad:"មិនសូវចូលចិត្ត",
+pvAskQ:"តើអ្នកយល់យ៉ាងណាដែរ?",rateThanks:"អរគុណ!", rateGood:"ចូលចិត្តណាស់", rateOk:"ធម្មតា", rateBad:"មិនសូវចូលចិត្ត",
 collectionNote:"ប្រទេស និងសំឡេងថ្មីនឹងត្រូវបានបន្ថែមបន្តិចម្តងៗតាមរយៈការអាប់ដេត។ បន្ទាប់គ្រោងនឹងមាន ឡាវ នេប៉ាល់ តួកគី និងច្រើនទៀត។",
 aboutTitle:"អំពីកម្មវិធីនេះ",
 faq1q:"ហេតុអ្វីបានជា «សំឡេងខុសគ្នារៀងរាល់ព្រឹក»?",
@@ -994,7 +993,6 @@ function nextPattern(){
 }
 
 // ===== コレクション表示 =====
-const FEEDBACK_URL = "https://docs.google.com/forms/d/e/1FAIpQLSf409CtOqPcbwHsQKVxiOA5kmic0wogNo64HUYW3XY4SDDiQw/viewform";
 const listEl = document.getElementById("countryList");
 function renderCollection(playingId){
   listEl.innerHTML = "";
@@ -1007,7 +1005,7 @@ function renderCollection(playingId){
     let html = `<div class="head"><span class="name">${c.flag} ${L(c.country)}</span></div>`;
     ps.forEach(p=>{
       const isPreviewing = (typeof preview !== "undefined" && preview && preview.id===p.id);
-      html += `<div class="pattern"><span><span class="place">${L(p.place)}</span>${p.real ? ' <span class="real">' + t("realBadge") + '</span>' : ""}</span><span style="display:flex;align-items:center;gap:8px;flex:none"><a class="fb" href="${FEEDBACK_URL}" target="_blank" rel="noopener">${t("feedbackLink")}</a><button class="pv${isPreviewing ? " on" : ""}" data-pv="${p.id}" type="button">${isPreviewing ? t("stopBtnSmall") : t("listenBtn")}</button></span></div>`;
+      html += `<div class="pattern"><span><span class="place">${L(p.place)}</span>${p.real ? ' <span class="real">' + t("realBadge") + '</span>' : ""}</span><span style="display:flex;align-items:center;gap:8px;flex:none"><button class="pv${isPreviewing ? " on" : ""}" data-pv="${p.id}" type="button">${isPreviewing ? t("stopBtnSmall") : t("listenBtn")}</button></span></div>`;
     });
     d.innerHTML = html;
     listEl.appendChild(d);
@@ -1207,14 +1205,19 @@ listEl.addEventListener("click", (e)=>{
   renderCollection(p.id);
   document.querySelectorAll("[data-pv]").forEach(x=>{ if(x.dataset.pv===id){ x.textContent = t("stopBtnSmall"); x.classList.add("on"); } });
 });
+const VOTE_URL = "https://script.google.com/macros/s/AKfycbxPuZ1IU7ambDxFWR1zLTEaH3hjJKRP99J5r2yxuoZLbNa2LHfYTDZ4d89OaxgwU1VRdg/exec";
 document.getElementById("pvAsk").addEventListener("click", (e)=>{
   const b = e.target.closest("[data-rate]"); if(!b) return;
-  const p = ALL_PATTERNS.find(x=>x.id===document.getElementById("pvAsk").dataset.pattern);
-  const rateLabel = t(b.dataset.rate==="good" ? "rateGood" : b.dataset.rate==="ok" ? "rateOk" : "rateBad");
-  document.getElementById("fbType").value = "0";
-  document.getElementById("fbMsg").value = (p ? t("pvMsg")(L(p.country), L(p.place), L(p.sound), rateLabel) : rateLabel);
-  document.getElementById("pvAsk").style.display = "none";
-  fbOpen();
+  const ask = document.getElementById("pvAsk");
+  const p = ALL_PATTERNS.find(x=>x.id===ask.dataset.pattern);
+  if(p && VOTE_URL){
+    try{
+      fetch(VOTE_URL, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain"}, body: JSON.stringify({id:p.id, label:p.place.ja + "「" + p.sound.ja + "」", vote:b.dataset.rate})}).catch(()=>{});
+    }catch(err){}
+  }
+  ask.querySelector(".q").textContent = t("rateThanks");
+  const row = ask.querySelector(".row"); if(row) row.style.display = "none";
+  setTimeout(()=>{ ask.style.display = "none"; }, 1600);
 });
 
 // ===== SNSシェア =====
