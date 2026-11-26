@@ -111,6 +111,7 @@
   .pattern{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--bluegrey);font-size:12px}
   .pattern .place{color:var(--text);font-weight:700}
   .pattern .stamp{color:var(--stamp);font-weight:800;white-space:nowrap}
+  .pattern .fb{font-size:11px;color:var(--muted);text-decoration:underline;white-space:nowrap;align-self:center}
   .country.locked{opacity:.55;filter:grayscale(.8);background:var(--bluegrey2)}
   details{margin-top:6px}
   summary{font-size:13px;font-weight:700;color:var(--accent);cursor:pointer;padding:6px 0}
@@ -400,7 +401,7 @@ days:["日","月","火","水","木","金","土"],
 heardCount:n=>n + "つ聞いた",
 comingSoon:"近日追加",
 listenBtn:"▶ 聞く", stopBtnSmall:"■ 止める",
-realBadge:"実録音",
+realBadge:"実録音",feedbackLink:"感想を送る",
 nowPlayingIntro:"今朝の目覚めは…",
 statusRinging:(c,p)=>"鳴っています：" + c + "・" + p,
 statusGoodMorning:(c,p)=>"おはようございます。今朝は " + c + "・" + p + " で目覚めました。「あなたの朝の旅」に記録しました ✓",
@@ -486,7 +487,7 @@ days:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
 heardCount:n=>"Heard " + n,
 comingSoon:"Coming soon",
 listenBtn:"▶ Listen", stopBtnSmall:"■ Stop",
-realBadge:"Real recording",
+realBadge:"Real recording",feedbackLink:"Send feedback",
 nowPlayingIntro:"This morning, you woke up to…",
 statusRinging:(c,p)=>"Ringing: " + c + " · " + p,
 statusGoodMorning:(c,p)=>"Good morning. Today you woke up in " + c + " · " + p + ". Saved to Your Morning Journey ✓",
@@ -573,7 +574,7 @@ days:["CN","T2","T3","T4","T5","T6","T7"],
 heardCount:n=>"Đã nghe " + n,
 comingSoon:"Sắp có",
 listenBtn:"▶ Nghe", stopBtnSmall:"■ Dừng",
-realBadge:"Ghi thật",
+realBadge:"Ghi thật",feedbackLink:"Gửi cảm nhận",
 nowPlayingIntro:"Sáng nay, bạn đã thức dậy cùng…",
 statusRinging:(c,p)=>"Đang reo: " + c + " · " + p,
 statusGoodMorning:(c,p)=>"Chào buổi sáng. Hôm nay bạn đã thức dậy ở " + c + " · " + p + ". Đã lưu vào Hành trình buổi sáng của bạn ✓",
@@ -659,7 +660,7 @@ days:["Min","Sen","Sel","Rab","Kam","Jum","Sab"],
 heardCount:n=>"Didengar " + n,
 comingSoon:"Segera hadir",
 listenBtn:"▶ Dengar", stopBtnSmall:"■ Berhenti",
-realBadge:"Rekaman asli",
+realBadge:"Rekaman asli",feedbackLink:"Kirim tanggapan",
 nowPlayingIntro:"Pagi ini, Anda bangun bersama…",
 statusRinging:(c,p)=>"Berbunyi: " + c + " · " + p,
 statusGoodMorning:(c,p)=>"Selamat pagi. Hari ini Anda bangun di " + c + " · " + p + ". Tersimpan di Perjalanan Pagi Anda ✓",
@@ -745,7 +746,7 @@ days:["Ahd","Isn","Sel","Rab","Kha","Jum","Sab"],
 heardCount:n=>"Didengar " + n,
 comingSoon:"Akan datang",
 listenBtn:"▶ Dengar", stopBtnSmall:"■ Berhenti",
-realBadge:"Rakaman sebenar",
+realBadge:"Rakaman sebenar",feedbackLink:"Hantar maklum balas",
 nowPlayingIntro:"Pagi ini, anda bangun bersama…",
 statusRinging:(c,p)=>"Berbunyi: " + c + " · " + p,
 statusGoodMorning:(c,p)=>"Selamat pagi. Hari ini anda bangun di " + c + " · " + p + ". Disimpan ke Perjalanan Pagi Anda ✓",
@@ -831,7 +832,7 @@ days:["អាទិត្យ","ចន្ទ","អង្គារ","ពុធ","�
 heardCount:n=>"បានស្តាប់ " + n,
 comingSoon:"ឆាប់ៗនេះ",
 listenBtn:"▶ ស្តាប់", stopBtnSmall:"■ បញ្ឈប់",
-realBadge:"ការថតពិត",
+realBadge:"ការថតពិត",feedbackLink:"ផ្ញើមតិ",
 nowPlayingIntro:"ព្រឹកនេះ អ្នកបានភ្ញាក់ជាមួយ…",
 statusRinging:(c,p)=>"កំពុងរោទ៍៖ " + c + " · " + p,
 statusGoodMorning:(c,p)=>"អរុណសួស្តី។ ថ្ងៃនេះអ្នកបានភ្ញាក់នៅ " + c + " · " + p + "។ បានរក្សាទុកទៅ ដំណើរពេលព្រឹករបស់អ្នក ✓",
@@ -993,6 +994,7 @@ function nextPattern(){
 }
 
 // ===== コレクション表示 =====
+const FEEDBACK_URL = "https://docs.google.com/forms/d/e/1FAIpQLSf409CtOqPcbwHsQKVxiOA5kmic0wogNo64HUYW3XY4SDDiQw/viewform";
 const listEl = document.getElementById("countryList");
 function renderCollection(playingId){
   listEl.innerHTML = "";
@@ -1005,7 +1007,7 @@ function renderCollection(playingId){
     let html = `<div class="head"><span class="name">${c.flag} ${L(c.country)}</span></div>`;
     ps.forEach(p=>{
       const isPreviewing = (typeof preview !== "undefined" && preview && preview.id===p.id);
-      html += `<div class="pattern"><span><span class="place">${L(p.place)}</span>${p.real ? ' <span class="real">' + t("realBadge") + '</span>' : ""}</span><span style="display:flex;align-items:center;gap:8px;flex:none"><button class="pv${isPreviewing ? " on" : ""}" data-pv="${p.id}" type="button">${isPreviewing ? t("stopBtnSmall") : t("listenBtn")}</button></span></div>`;
+      html += `<div class="pattern"><span><span class="place">${L(p.place)}</span>${p.real ? ' <span class="real">' + t("realBadge") + '</span>' : ""}</span><span style="display:flex;align-items:center;gap:8px;flex:none"><a class="fb" href="${FEEDBACK_URL}" target="_blank" rel="noopener">${t("feedbackLink")}</a><button class="pv${isPreviewing ? " on" : ""}" data-pv="${p.id}" type="button">${isPreviewing ? t("stopBtnSmall") : t("listenBtn")}</button></span></div>`;
     });
     d.innerHTML = html;
     listEl.appendChild(d);
